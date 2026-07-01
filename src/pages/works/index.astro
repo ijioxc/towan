@@ -89,15 +89,15 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
   </div>
 
   <!-- 虛擬捲動容器 (背景改為白色 bg-white) -->
-  <div id="scroll-viewport" class="fixed inset-0 overflow-hidden bg-white flex justify-center items-center">
+  <div id="scroll-viewport" class="fixed inset-0 bg-white overflow-y-auto overflow-x-hidden md:overflow-hidden md:flex md:justify-center md:items-center">
     
-    <!-- Mobile: 單欄往下捲動 -->
-    <div class="col-wrap md:hidden w-[85vw] h-full relative flex flex-col" data-speed="1" data-dir="-1" data-offset="0">
-      <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkMobile} />
+    <!-- Mobile: 單欄往下捲動 (原生滾動 Native Scroll) -->
+    <div class="md:hidden w-[85vw] mx-auto pt-[12vh] pb-24 flex flex-col">
+      <div set:html={chunkMobile} />
     </div>
 
-    <!-- Desktop: 雙欄反向交錯，加入適當的間距 -->
-    <div class="hidden md:flex gap-[4px]">
+    <!-- Desktop: 雙欄反向交錯，加入適當的間距 (虛擬滾動) -->
+    <div class="hidden md:flex gap-[4px] h-full items-center">
       <!-- Col 1: 往下走 (dir=1) -->
       <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="1.2" data-dir="1" data-offset="-100">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol1} />
@@ -173,6 +173,7 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
 
     // 虛擬滾動
     const wheelHandler = (e: WheelEvent) => {
+      if (window.innerWidth < 768) return;
       if (isLocked) unlockAll();
       
       // If we are at the top and scrolling up, navigate back to home
@@ -192,6 +193,7 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
     window.addEventListener('touchstart', touchStartHandler, { passive: true });
 
     const touchMoveHandler = (e: TouchEvent) => {
+      if (window.innerWidth < 768) return;
       if (isLocked) unlockAll();
       const touchY = e.touches[0].clientY;
       const deltaY = touchStartY - touchY;
@@ -224,17 +226,20 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
       };
     });
 
-    // Animate cards staggering in via interwoven waterfall
-    gsap.from('.col-wrap', {
-      opacity: 0,
-      y: (index) => index % 2 === 0 ? '100vh' : '-100vh',
-      stagger: 0.05,
-      duration: 1.5,
-      ease: 'power3.out',
-      delay: 0.1
-    });
+    // Animate cards staggering in via interwoven waterfall (desktop only)
+    if (window.innerWidth >= 768) {
+      gsap.from('.col-wrap', {
+        opacity: 0,
+        y: (index) => index % 2 === 0 ? '100vh' : '-100vh',
+        stagger: 0.05,
+        duration: 1.5,
+        ease: 'power3.out',
+        delay: 0.1
+      });
+    }
 
     function measure() {
+      if (window.innerWidth < 768) return;
       let limits: number[] = [];
       colData.forEach(c => {
         if (c.chunkEl) {
@@ -262,6 +267,7 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
     setTimeout(measure, 300);
 
     function renderLoop() {
+      if (window.innerWidth < 768) return;
       scrollY += (targetY - scrollY) * 0.08;
 
       if (!isLocked) {
@@ -326,6 +332,8 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
 
       // 處理垂直排擠 (推開同一個直欄的其他元素)
       const parentCol = tile.closest('.col-wrap');
+      if (!parentCol) return; // Prevent error on mobile if triggered
+      
       const siblingWrappers = parentCol.querySelectorAll('.tile-wrapper');
 
       siblingWrappers.forEach(w => {
@@ -404,6 +412,11 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
     // 圖片點擊事件
     tiles.forEach((tile) => {
       tile.addEventListener('click', (e) => {
+        if (window.innerWidth < 768) {
+          // 在手機版上取消效果，直接使用原生跳轉
+          return;
+        }
+
         if (isLocked) {
           // 如果已經有放大的圖片
           if (tile === activeTile) {
@@ -423,6 +436,7 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
     });
 
     window.addEventListener('click', (e) => {
+      if (window.innerWidth < 768) return;
       if (isLocked && !e.target.closest('.tile')) {
         unlockAll();
       }
