@@ -175,10 +175,15 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
     let activeTile = null;
 
     let maxScrollLimit = 5000;
+    
+    // Ignore scrolling momentum from previous page (homepage) for 1 second
+    const ignoreScrollUntil = Date.now() + 1000;
 
     // 虛擬滾動
     const wheelHandler = (e: WheelEvent) => {
       if (window.innerWidth < 768) return;
+      if (Date.now() < ignoreScrollUntil) return; // Prevent momentum bleed
+      
       if (isLocked) unlockAll();
       
       // If we are at the top and scrolling up, navigate back to home
@@ -199,6 +204,8 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
 
     const touchMoveHandler = (e: TouchEvent) => {
       if (window.innerWidth < 768) return;
+      if (Date.now() < ignoreScrollUntil) return; // Prevent momentum bleed
+      
       if (isLocked) unlockAll();
       const touchY = e.touches[0].clientY;
       const deltaY = touchStartY - touchY;
