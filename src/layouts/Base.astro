@@ -36,9 +36,10 @@ const { title = 'TOWAN 數位影像', heroNav = false } = Astro.props;
 </head>
 <body class="bg-white text-neutral-900 antialiased w-full">
   {!heroNav && (
-    <header class="box-border fixed top-0 left-0 right-0 w-full z-50 flex items-center justify-between px-6 h-14 bg-white border-b border-neutral-100">
-      <a href={import.meta.env.BASE_URL} class="inline-block translate-x-4 translate-y-2"><img src={import.meta.env.BASE_URL + "images/towanlogo2.png"} alt="TOWAN" class="h-5" /></a>
-            <nav class="flex items-center text-xs tracking-widest text-neutral-400 uppercase font-normal">
+    <header class="box-border fixed z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none text-black"
+      style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
+      <a href={import.meta.env.BASE_URL} class="pointer-events-auto inline-block translate-x-4 translate-y-2"><img src={import.meta.env.BASE_URL + "images/towanlogo2.png"} alt="TOWAN" class="h-5" /></a>
+            <nav class="flex items-center text-xs tracking-widest text-neutral-400 uppercase pointer-events-auto font-normal">
         <a href={import.meta.env.BASE_URL + "works"} class="hover:text-neutral-900 transition-colors no-underline mr-3 md:mr-7">WORKS</a>
         <a href={import.meta.env.BASE_URL + "about"} class="hover:text-neutral-900 transition-colors no-underline mr-3 md:mr-7">ABOUT</a>
         <a href={import.meta.env.BASE_URL + "contact"} class="hover:text-neutral-900 transition-colors no-underline mr-3 md:mr-7">CONTACT</a>

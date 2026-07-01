@@ -3,7 +3,8 @@ import Base from '../layouts/Base.astro';
 ---
 <Base title="Contact — TOWAN" heroNav={true}>
   <!-- Nav identical position to index.astro -->
-  <div class="box-border fixed top-0 left-0 w-full z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none text-black">
+  <div class="box-border fixed z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none text-black"
+    style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
     <a href={import.meta.env.BASE_URL} class="pointer-events-auto hover:opacity-50 transition-opacity inline-block translate-x-4 translate-y-2">
       <img src={import.meta.env.BASE_URL + "images/towanlogo2.png"} alt="TOWAN" class="h-5" />
     </a>
