@@ -43,11 +43,14 @@ function renderTile(p: any, isLeftCol: boolean) {
     ? "right-[100%] w-[16vw] pr-6 text-right" 
     : "left-[100%] w-[16vw] pl-6 text-left";
 
+  const isAbsolute = cover.startsWith('http');
+  const srcUrl = isAbsolute ? cover : `${import.meta.env.BASE_URL}${cover.replace(/^\//, '')}`;
+
   return `
     <div class="tile-wrapper relative w-full">
       <a href="${import.meta.env.BASE_URL}works/${p.id}" class="tile ${colClass} block w-full relative cursor-pointer no-underline group text-black">
         <div class="tile-inner w-full relative h-full">
-          <img src="${import.meta.env.BASE_URL}${p.image.replace(/^\//, '')}" alt="${p.title}" class="w-full h-auto block object-cover" />
+          <img src="${srcUrl}" alt="${p.title}" class="w-full h-auto block object-cover" />
         </div>
         
         <div class="tile-info hidden md:flex absolute top-1/2 -translate-y-1/2 w-max flex-col gap-1 text-[0.65rem] tracking-[0.15em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ${textPosition}">
