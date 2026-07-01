@@ -33,7 +33,7 @@ const project = projects.find((p: any) => p.id === id);
       {project.inner_images && project.inner_images.map((img: string, index: number) => (
         <div class="relative w-full mb-10 project-img opacity-0 translate-y-6">
           <img
-            src={`/media/work/${project.inner_folder}/${img}`}
+            src={`${import.meta.env.BASE_URL}media/work/${project.inner_folder}/${img}`}
             alt=""
             loading="lazy"
             decoding="async"

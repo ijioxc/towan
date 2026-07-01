@@ -7,14 +7,14 @@ const { project: p, eager = false } = Astro.props;
 const cover = p.images?.[0];
 ---
 <a
-  href={`/works/${p.id}`}
+  href={`${import.meta.env.BASE_URL}works/${p.id}`}
   class="project-card group relative block overflow-hidden opacity-0"
   data-cats={JSON.stringify(p.categories)}
   style="aspect-ratio:1/1;"
 >
   {cover ? (
     <img
-      src={`/media/projects/${p.id}/${cover.filename}`}
+      src={`${import.meta.env.BASE_URL}media/projects/${p.id}/${cover.filename}`}
       alt={p.title}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"

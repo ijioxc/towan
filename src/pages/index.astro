@@ -12,7 +12,7 @@ import Base from '../layouts/Base.astro';
     <div id="slides" class="absolute inset-0 z-0">
       {[0,2,3,4,5,7,9].map((n, i) => (
         <img
-          src={`/images/i${n}.jpg`}
+          src={`${import.meta.env.BASE_URL}images/i${n}.jpg`}
           class="slide absolute inset-0 w-full h-full object-cover"
           style={`opacity:${i === 0 ? 1 : 0}`}
         />
