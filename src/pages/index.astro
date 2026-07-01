@@ -20,25 +20,24 @@ import Base from '../layouts/Base.astro';
     </div>
 
     <!-- [z-1] Frosted glass panel — backdrop-filter + tint directly on panel -->
-    <div id="glass-panel" class="absolute z-10" style="
-      inset: 2.5vh 2.5vw;
-      border-radius: 20px;
-      overflow: hidden;
-      background: rgba(190,15,50,0.78);
-      backdrop-filter: blur(56px) saturate(260%) brightness(0.88);
-      -webkit-backdrop-filter: blur(56px) saturate(260%) brightness(0.88);
-    ">
-      <!-- Milky highlight skin -->
-      <div class="absolute inset-0 pointer-events-none"
-        style="background: rgba(255,255,255,0.08);"></div>
+    <!-- 玻璃質感色塊層 (z-10) -->
+    <div class="absolute z-10 pointer-events-none rounded-xl sm:rounded-2xl md:rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] overflow-hidden" 
+      style="top: 2.5vh; bottom: 2.5vh; left: 2.5vw; right: 2.5vw;
+             background: rgba(229, 0, 78, 0.55); /* #E5004E with lower opacity for more glass effect */
+             backdrop-filter: blur(48px) saturate(180%);
+             -webkit-backdrop-filter: blur(48px) saturate(180%);
+             border: 1px solid rgba(255, 255, 255, 0.15);
+             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 2px 20px rgba(255, 255, 255, 0.15), 0 30px 60px rgba(0, 0, 0, 0.3);">
+      
+      <!-- Subtle highlight skin -->
+      <div class="absolute inset-0 pointer-events-none" style="background: rgba(255,255,255,0.03);"></div>
+      
       <!-- Diagonal light rake -->
-      <div class="absolute inset-0 pointer-events-none"
-        style="background: linear-gradient(130deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.04) 100%);"></div>
-      <!-- Grain -->
-      <div class="absolute inset-0 pointer-events-none"
-        style="opacity:0.045; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
+      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 20%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);"></div>
 
-      <!-- HOW WE WORK — breathing glow, links to works -->
+      <!-- Grain -->
+      <div class="absolute inset-0 pointer-events-none" style="opacity:0.04; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
+    </div>   <!-- HOW WE WORK — breathing glow, links to works -->
       <a href={import.meta.env.BASE_URL + "works"} class="absolute bottom-8 right-5 md:bottom-[12vh] md:right-[6vw] text-right no-underline group flex flex-col items-end translate-y-[5px]" style="z-index:10">
         <div id="how-we-work-group" class="flex items-center gap-2 md:gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="relative -top-[1px] text-white/80 group-hover:text-white group-hover:translate-y-2 transition-all duration-300 w-5 h-5 md:w-6 md:h-6"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
