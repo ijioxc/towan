@@ -16,7 +16,7 @@ const projects = JSON.parse(readFileSync(indexPath, 'utf-8'));
 const project = projects.find((p: any) => p.id === id);
 ---
 <Base title={`${project.title} — TOWAN`}>
-  <div class="max-w-4xl mx-auto px-6 py-12 pb-24">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8 py-12 pb-24">
     <a href={import.meta.env.BASE_URL + "works"} class="text-xs tracking-widest text-neutral-400 hover:text-neutral-900 transition-colors mb-8 inline-block">← WORKS</a>
 
     <div class="mb-10">
@@ -25,8 +25,8 @@ const project = projects.find((p: any) => p.id === id);
           <span class="text-[0.6rem] tracking-widest text-neutral-500 bg-neutral-100 px-2 py-1">{project.category}</span>
         )}
       </div>
-      <h1 class="text-4xl font-bold tracking-wide">{project.title}</h1>
-      {project.subtitle && <p class="mt-2 text-neutral-500">{project.subtitle}</p>}
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-wide">{project.title}</h1>
+      {project.subtitle && <p class="mt-2 text-sm sm:text-base text-neutral-500">{project.subtitle}</p>}
     </div>
 
     <div class="flex flex-col gap-2" id="project-images">
