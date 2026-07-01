@@ -101,8 +101,8 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
 
     <!-- Desktop: 雙欄反向交錯，加入適當的間距 (虛擬滾動) -->
     <div class="hidden md:flex gap-[4px] h-full items-center">
-      <!-- Col 1: 往下走 (dir=1) -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="1.2" data-dir="1" data-offset="-100">
+      <!-- Col 1: 往上走 (dir=-1) 速度正常 -->
+      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="1.0" data-dir="-1" data-offset="-100">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol1} />
       </div>
       
@@ -231,12 +231,12 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
       };
     });
 
-    // Animate cards staggering in via interwoven waterfall (desktop only)
+    // Animate cards staggering in from the bottom (desktop only)
     if (window.innerWidth >= 768) {
       gsap.from('.col-wrap', {
         opacity: 0,
-        y: (index) => index % 2 === 0 ? '100vh' : '-100vh',
-        stagger: 0.05,
+        y: '100vh',
+        stagger: 0.1,
         duration: 1.5,
         ease: 'power3.out',
         delay: 0.1
