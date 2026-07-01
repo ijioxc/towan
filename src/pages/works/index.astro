@@ -106,8 +106,8 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol1} />
       </div>
       
-      <!-- Col 2: 往上走 (dir=-1) -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="0.9" data-dir="-1" data-offset="150">
+      <!-- Col 2: 往上走 (dir=-1) 起點設得更低，讓兩列在滾動時能在畫面中央完美「擦肩而過」 -->
+      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="0.9" data-dir="-1" data-offset="500">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol2} />
       </div>
     </div>
