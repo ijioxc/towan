@@ -62,9 +62,11 @@ import WorksSection from '../components/WorksSection.astro';
       onLeaveBack: () => setNavLight()
     });
 
+    const base = import.meta.env.BASE_URL;
+
     function setNavDark() {
-      // Switch logo to dark version or apply filter
-      gsap.to('#spa-header .nav-img', { filter: 'invert(1) brightness(0)', duration: 0.5 });
+      const img = document.querySelector('#spa-header .nav-img') as HTMLImageElement;
+      if (img) img.src = base + "images/towanlogo2.png";
       gsap.to('#spa-header .nav-icon', { filter: 'brightness(0)', duration: 0.5 });
       
       const links = document.querySelectorAll('#spa-header .nav-links a.text-white\\/60, #spa-header .nav-links a.text-white');
@@ -75,8 +77,8 @@ import WorksSection from '../components/WorksSection.astro';
     }
 
     function setNavLight() {
-      // Switch logo back to light
-      gsap.to('#spa-header .nav-img', { filter: 'none', duration: 0.5 });
+      const img = document.querySelector('#spa-header .nav-img') as HTMLImageElement;
+      if (img) img.src = base + "images/towanlogo3.png";
       gsap.to('#spa-header .nav-icon', { filter: 'brightness(0) invert(1)', duration: 0.5 });
 
       const links = document.querySelectorAll('#spa-header .nav-links a.text-black\\/60, #spa-header .nav-links a.text-black');
