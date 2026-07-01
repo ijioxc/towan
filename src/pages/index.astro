@@ -1,176 +1,89 @@
 ---
 import Base from '../layouts/Base.astro';
-
-// nav for homepage is transparent/white — override in layout
+import HeroSection from '../components/HeroSection.astro';
+import WorksSection from '../components/WorksSection.astro';
 ---
+
 <Base title="TOWAN 數位影像" heroNav={true}>
-
-  <!-- Full-viewport hero -->
-  <section id="hero" class="relative w-full h-screen overflow-hidden">
-
-    <!-- [z-0] Slideshow images -->
-    <div id="slides" class="absolute inset-0 z-0">
-      {[0,2,3,4,5,7,9].map((n, i) => (
-        <img
-          src={`${import.meta.env.BASE_URL}images/i${n}.jpg`}
-          class="slide absolute inset-0 w-full h-full object-cover"
-          style={`opacity:${i === 0 ? 1 : 0}`}
-        />
-      ))}
-    </div>
-
-    <!-- [z-1] Frosted glass panel — backdrop-filter + tint directly on panel -->
-    <!-- 玻璃質感色塊層 (z-10) -->
-    <div class="absolute z-10 pointer-events-none rounded-xl sm:rounded-2xl md:rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] overflow-hidden" 
-      style="top: 2.5vh; bottom: 2.5vh; left: 2.5vw; right: 2.5vw;
-             background: rgba(229, 0, 78, 0.55); /* #E5004E with lower opacity for more glass effect */
-             backdrop-filter: blur(48px) saturate(180%);
-             -webkit-backdrop-filter: blur(48px) saturate(180%);
-             border: 1px solid rgba(255, 255, 255, 0.15);
-             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 2px 20px rgba(255, 255, 255, 0.15), 0 30px 60px rgba(0, 0, 0, 0.3);">
-      
-      <!-- Subtle highlight skin -->
-      <div class="absolute inset-0 pointer-events-none" style="background: rgba(255,255,255,0.03);"></div>
-      
-      <!-- Diagonal light rake -->
-      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 20%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);"></div>
-
-      <!-- Grain -->
-      <div class="absolute inset-0 pointer-events-none" style="opacity:0.04; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
-    </div>   <!-- HOW WE WORK — breathing glow, links to works -->
-      <a href={import.meta.env.BASE_URL + "works"} class="absolute bottom-8 right-5 md:bottom-[12vh] md:right-[6vw] text-right no-underline group flex flex-col items-end translate-y-[5px]" style="z-index:10">
-        <div id="how-we-work-group" class="flex items-center gap-2 md:gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="relative -top-[1px] text-white/80 group-hover:text-white group-hover:translate-y-2 transition-all duration-300 w-5 h-5 md:w-6 md:h-6"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-          <p id="how-we-work-text" class="font-semibold tracking-[0.22em] text-white/80 group-hover:text-white group-hover:translate-y-2 transition-all duration-300" style="font-size:clamp(1.1rem,2.1vw,1.6rem);">HOW WE WORK</p>
-        </div>
-        <p class="text-white/40 tracking-widest mt-1 text-[0.65rem]">2008 — PRESENT</p>
+  
+  <!-- Dynamic NAV for the SPA -->
+  <div id="spa-header" class="box-border fixed z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none transition-colors duration-500" style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
+    <a href={import.meta.env.BASE_URL} class="pointer-events-auto hover:opacity-50 transition-opacity inline-block translate-x-4 translate-y-2">
+      <img src={import.meta.env.BASE_URL + "images/towanlogo3.png"} alt="TOWAN" class="h-5 nav-img transition-all duration-500" />
+    </a>
+    <nav class="flex items-center text-[10px] sm:text-xs tracking-widest uppercase font-normal pointer-events-auto nav-links">
+      <a href="#works-section" class="text-white/60 hover:text-white transition-colors duration-500 no-underline mr-2 sm:mr-4 md:mr-7">WORKS</a>
+      <a href={import.meta.env.BASE_URL + "about"} class="text-white/60 hover:text-white transition-colors duration-500 no-underline mr-2 sm:mr-4 md:mr-7">ABOUT</a>
+      <a href={import.meta.env.BASE_URL + "contact"} class="text-white/60 hover:text-white transition-colors duration-500 no-underline mr-2 sm:mr-4 md:mr-7">CONTACT</a>
+      <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity mr-1 sm:mr-2 md:mr-4">
+        <img src={import.meta.env.BASE_URL + "images/icon-a.png"} alt="social" class="h-[14px] md:h-[16px] nav-icon transition-all duration-500" style="filter: brightness(0) invert(1);" />
       </a>
-    </div>
+      <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
+        <img src={import.meta.env.BASE_URL + "images/icon-b.png"} alt="contact" class="h-[14px] md:h-[16px] nav-icon transition-all duration-500" style="filter: brightness(0) invert(1);" />
+      </a>
+    </nav>
+  </div>
 
-    <!-- NAV (Extracted from glass panel so it doesn't move during transition) -->
-    <div id="header" transition:name="header" class="box-border absolute z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none transition-colors duration-1000" style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
-      <a href={import.meta.env.BASE_URL} class="pointer-events-auto hover:opacity-50 transition-opacity inline-block translate-x-4 translate-y-2"><img src={import.meta.env.BASE_URL + "images/towanlogo3.png"} alt="TOWAN" class="h-5 nav-img" /></a>
-            <nav class="flex items-center text-[10px] sm:text-xs tracking-widest uppercase font-normal pointer-events-auto nav-links">
-        <a href={import.meta.env.BASE_URL + "works"} class="text-white/60 hover:text-white transition-colors no-underline mr-2 sm:mr-4 md:mr-7">WORKS</a>
-        <a href={import.meta.env.BASE_URL + "about"} class="text-white/60 hover:text-white transition-colors no-underline mr-2 sm:mr-4 md:mr-7">ABOUT</a>
-        <a href={import.meta.env.BASE_URL + "contact"} class="text-white/60 hover:text-white transition-colors no-underline mr-2 sm:mr-4 md:mr-7">CONTACT</a>
-        <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity mr-1 sm:mr-2 md:mr-4">
-          <img src={import.meta.env.BASE_URL + "images/icon-a.png"} alt="social" class="h-[14px] md:h-[16px] nav-img" style="filter: brightness(0) invert(1);" />
-        </a>
-        <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
-          <img src={import.meta.env.BASE_URL + "images/icon-b.png"} alt="contact" class="h-[14px] md:h-[16px] nav-img" style="filter: brightness(0) invert(1);" />
-        </a>
-      </nav>
-    </div>
-
-    <!-- Title ABOVE glass panel (z-20) — centered in left half of panel on desktop, full width on mobile -->
-    <div class="absolute z-20 pointer-events-none select-none flex items-center justify-center w-[95vw] md:w-[47.5vw]"
-      style="top: 2.5vh; bottom: 2.5vh; left: 2.5vw;">
-      <img id="hero-title" src={import.meta.env.BASE_URL + "images/towandigitalimage.png"} alt="TOWAN DIGITAL IMAGE"
-        style="height:clamp(7rem,45vw,26rem); width:auto; max-width:90%; object-fit:contain; filter:drop-shadow(0 2px 32px rgba(160,20,50,0.35));" />
-    </div>
-
-
-  </section>
+  <HeroSection />
+  <WorksSection />
 
 </Base>
 
 <script>
   import { gsap } from 'gsap';
-  import { navigate } from 'astro:transitions/client';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import Lenis from 'lenis';
+
+  gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('astro:page-load', () => {
-    // Only run if on the home page (where section and hero-title exist)
-    if (!document.getElementById('hero-title')) return;
+    const spaHeader = document.getElementById('spa-header');
+    if (!spaHeader) return;
 
-    // ── Slideshow crossfade ──
-    const slides = document.querySelectorAll<HTMLImageElement>('.slide');
-    if (slides.length === 0) return;
-    
-    let current = 0;
-    function nextSlide() {
-      const prev = current;
-      current = (current + 1) % slides.length;
-      gsap.to(slides[prev], { opacity: 0, duration: 1.5, ease: 'power2.inOut' });
-      gsap.to(slides[current], { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
+    // Smooth scroll for WORKS link in header
+    const worksLink = spaHeader.querySelector('a[href="#works-section"]');
+    if (worksLink) {
+      worksLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if ((window as any).lenis) {
+          (window as any).lenis.scrollTo('#works-section');
+        } else {
+          document.querySelector('#works-section')?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
     }
-    const slideInterval = setInterval(nextSlide, 4000);
 
-    // Clean up interval on page leave
-    document.addEventListener('astro:before-swap', () => clearInterval(slideInterval), { once: true });
-
-    // ── Hero title entrance ──
-    gsap.from('#hero-title', {
-      opacity: 0, y: 60, duration: 1.4, ease: 'power3.out', delay: 0.4,
+    // Change nav colors based on scroll position
+    // We trigger the color change when the Works section hits the top of the screen
+    ScrollTrigger.create({
+      trigger: "#works-section",
+      start: "top 5%", // when top of works section hits 5% from top of viewport
+      onEnter: () => setNavDark(),
+      onLeaveBack: () => setNavLight()
     });
 
-    // ── HOW WE WORK breathing — glow on text, scale/float on group ──
-    gsap.fromTo('#how-we-work-group',
-      { scale: 1, y: 0, opacity: 0.7 },
-      {
-        scale: 1.015,
-        y: -10,
-        opacity: 1,
-        duration: 2.2,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        transformOrigin: 'right center',
-      }
-    );
-
-    gsap.fromTo('#how-we-work-text',
-      { textShadow: '0 0 0px rgba(255,200,210,0)' },
-      {
-        textShadow: '0 0 28px rgba(255,215,220,1), 0 0 70px rgba(255,160,180,0.85)',
-        duration: 2.2,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-      }
-    );
-
-    // ── Scroll to Works transition ──
-    let isNavigating = false;
-
-    function goToWorks() {
-      if (isNavigating) return;
-      isNavigating = true;
-
-      // Animate header to black/dark color against the new white background
-      gsap.to('#header .nav-links a', { color: 'rgba(0,0,0,0.6)', duration: 0.6, ease: 'power2.inOut' });
-      gsap.to('#header .nav-img', { filter: 'invert(1) brightness(0)', duration: 0.6, ease: 'power2.inOut' });
-
-      // Navigate immediately to trigger the 1s seamless crossfade
-      navigate(import.meta.env.BASE_URL + 'works');
+    function setNavDark() {
+      // Switch logo to dark version or apply filter
+      gsap.to('#spa-header .nav-img', { filter: 'invert(1) brightness(0)', duration: 0.5 });
+      gsap.to('#spa-header .nav-icon', { filter: 'brightness(0)', duration: 0.5 });
+      
+      const links = document.querySelectorAll('#spa-header .nav-links a.text-white\\/60, #spa-header .nav-links a.text-white');
+      links.forEach(l => {
+        l.classList.remove('text-white/60', 'hover:text-white', 'text-white');
+        l.classList.add('text-black/60', 'hover:text-black');
+      });
     }
 
-    const wheelHandler = (e: WheelEvent) => {
-      if (e.deltaY > 25 || e.deltaX > 25) goToWorks();
-    };
-    window.addEventListener('wheel', wheelHandler, { passive: true });
+    function setNavLight() {
+      // Switch logo back to light
+      gsap.to('#spa-header .nav-img', { filter: 'none', duration: 0.5 });
+      gsap.to('#spa-header .nav-icon', { filter: 'brightness(0) invert(1)', duration: 0.5 });
 
-    let touchStartX = 0;
-    let touchStartY = 0;
-    const touchStartHandler = (e: TouchEvent) => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    };
-    window.addEventListener('touchstart', touchStartHandler, { passive: true });
-
-    const touchMoveHandler = (e: TouchEvent) => {
-      if (isNavigating) return;
-      const deltaX = touchStartX - e.touches[0].clientX;
-      const deltaY = touchStartY - e.touches[0].clientY;
-      if (deltaX > 40 || deltaY > 40) goToWorks();
-    };
-    window.addEventListener('touchmove', touchMoveHandler, { passive: true });
-
-    // Clean up event listeners on page leave
-    document.addEventListener('astro:before-swap', () => {
-      window.removeEventListener('wheel', wheelHandler);
-      window.removeEventListener('touchstart', touchStartHandler);
-      window.removeEventListener('touchmove', touchMoveHandler);
-    }, { once: true });
+      const links = document.querySelectorAll('#spa-header .nav-links a.text-black\\/60, #spa-header .nav-links a.text-black');
+      links.forEach(l => {
+        l.classList.remove('text-black/60', 'hover:text-black', 'text-black');
+        l.classList.add('text-white/60', 'hover:text-white');
+      });
+    }
   });
 </script>
