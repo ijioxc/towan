@@ -102,12 +102,12 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
     <!-- Desktop: 雙欄反向交錯，加入適當的間距 (虛擬滾動) -->
     <div class="hidden md:flex gap-[4px] h-full items-center">
       <!-- Col 1: 往上走 (dir=-1) 速度正常 -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="1.0" data-dir="-1" data-offset="-100">
+      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="1.0" data-dir="-1" data-offset="100">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol1} />
       </div>
       
-      <!-- Col 2: 往上走 (dir=-1) -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="0.9" data-dir="-1" data-offset="-400">
+      <!-- Col 2: 往上走 (dir=-1) 稍微慢一點點產生視差 -->
+      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="0.85" data-dir="-1" data-offset="220">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol2} />
       </div>
     </div>
