@@ -1,0 +1,48 @@
+{
+  "id": "stamp",
+  "title": "STAMP",
+  "subtitle": "",
+  "categories": [
+    "GRAPHIC"
+  ],
+  "date": "",
+  "order": 88,
+  "images": [
+    {
+      "filename": "01.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "02.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "03.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "04.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "05.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "06.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    }
+  ]
+}

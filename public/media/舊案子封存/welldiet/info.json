@@ -1,0 +1,78 @@
+{
+  "id": "welldiet",
+  "title": "WELLDIET",
+  "subtitle": "",
+  "categories": [
+    "BRANDING"
+  ],
+  "date": "",
+  "order": 48,
+  "images": [
+    {
+      "filename": "01.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "02.jpg",
+      "width": 780,
+      "height": 271,
+      "aspectRatio": 0.347436
+    },
+    {
+      "filename": "03.gif",
+      "width": 864,
+      "height": 486,
+      "aspectRatio": 0.5625
+    },
+    {
+      "filename": "04.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "05.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "06.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "07.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "08.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "09.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "10.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "11.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    }
+  ]
+}

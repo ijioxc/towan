@@ -1,0 +1,77 @@
+---
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title?: string;
+  heroNav?: boolean;  // true = transparent nav over pink hero
+}
+const { title = 'TOWAN 數位影像', heroNav = false } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <ClientRouter />
+  <style>
+    @import "tailwindcss";
+    
+    /* Premium slow crossfade for all page transitions */
+    ::view-transition-old(root) {
+      animation: fade-out 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    ::view-transition-new(root) {
+      animation: fade-in 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    @keyframes fade-out {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-white text-neutral-900 antialiased w-full">
+  {!heroNav && (
+    <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 h-14 bg-white border-b border-neutral-100">
+      <a href="/"><img src="/images/towanlogo2.png" alt="TOWAN" class="h-8" /></a>
+      <nav class="flex gap-7 items-center text-xs tracking-widest text-neutral-400 uppercase font-normal">
+        <a href="/works" class="hover:text-neutral-900 transition-colors no-underline">WORKS</a>
+        <a href="/about" class="hover:text-neutral-900 transition-colors no-underline">ABOUT</a>
+        <a href="/contact" class="hover:text-neutral-900 transition-colors no-underline">CONTACT</a>
+        <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity ml-2">
+          <img src="/images/fblogo.png" alt="FB" class="h-[14px]" style="filter: brightness(0);" />
+        </a>
+        <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
+          <img src="/images/maillogo.png" alt="Mail" class="h-[14px]" style="filter: brightness(0);" />
+        </a>
+      </nav>
+    </header>
+  )}
+
+  <main class={heroNav ? '' : 'pt-14'}>
+    <slot />
+  </main>
+</body>
+
+<script>
+  import Lenis from 'lenis';
+
+  let lenis;
+  function initLenis() {
+    if (lenis) lenis.destroy();
+    lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  }
+
+  document.addEventListener('astro:page-load', initLenis);
+</script>
+</html>

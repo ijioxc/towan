@@ -1,0 +1,78 @@
+{
+  "id": "weibei",
+  "title": "WEI BEI",
+  "subtitle": "",
+  "categories": [
+    "BOOK DESIGN"
+  ],
+  "date": "",
+  "order": 30,
+  "images": [
+    {
+      "filename": "01.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    },
+    {
+      "filename": "02.jpg",
+      "width": 780,
+      "height": 606,
+      "aspectRatio": 0.776923
+    },
+    {
+      "filename": "03.jpg",
+      "width": 780,
+      "height": 428,
+      "aspectRatio": 0.548718
+    },
+    {
+      "filename": "04.jpg",
+      "width": 780,
+      "height": 428,
+      "aspectRatio": 0.548718
+    },
+    {
+      "filename": "05.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    },
+    {
+      "filename": "06.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    },
+    {
+      "filename": "07.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    },
+    {
+      "filename": "08.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    },
+    {
+      "filename": "09.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    },
+    {
+      "filename": "10.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    },
+    {
+      "filename": "11.jpg",
+      "width": 780,
+      "height": 501,
+      "aspectRatio": 0.642308
+    }
+  ]
+}

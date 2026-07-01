@@ -1,0 +1,33 @@
+---
+interface Props {
+  project: any;
+  eager?: boolean;
+}
+const { project: p, eager = false } = Astro.props;
+const cover = p.images?.[0];
+---
+<a
+  href={`/works/${p.id}`}
+  class="project-card group relative block overflow-hidden opacity-0"
+  data-cats={JSON.stringify(p.categories)}
+  style="aspect-ratio:1/1;"
+>
+  {cover ? (
+    <img
+      src={`/media/projects/${p.id}/${cover.filename}`}
+      alt={p.title}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+  ) : (
+    <div class="absolute inset-0 bg-neutral-100 flex items-center justify-center px-3">
+      <h2 class="text-xs font-semibold tracking-wide text-neutral-400 leading-tight text-center">{p.title}</h2>
+    </div>
+  )}
+  <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
+  <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+    <span class="text-[0.6rem] tracking-widest text-white/80 mb-1">{p.categories[0]}</span>
+    <h2 class="text-xs font-semibold tracking-wide text-white leading-tight">{p.title}</h2>
+  </div>
+</a>

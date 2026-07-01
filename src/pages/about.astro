@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="About — TOWAN" heroNav={true}>
+  <!-- Nav identical position to index.astro -->
+  <div class="fixed z-50 flex items-center justify-between px-8 pt-7 pb-2 pointer-events-none text-black" style="inset: 2.5vh 2.5vw auto 2.5vw;">
+    <a href="/" class="pointer-events-auto hover:opacity-50 transition-opacity">
+      <img src="/images/towanlogo.png" alt="TOWAN" class="h-7" />
+    </a>
+    <nav class="flex gap-7 items-center text-xs tracking-widest uppercase font-normal pointer-events-auto">
+      <a href="/works" class="text-black/60 hover:text-black transition-colors no-underline">WORKS</a>
+      <a href="/about" class="text-black transition-colors no-underline">ABOUT</a>
+      <a href="/contact" class="text-black/60 hover:text-black transition-colors no-underline">CONTACT</a>
+      <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity ml-2">
+        <img src="/images/fblogo.png" alt="FB" class="h-[14px]" style="filter: brightness(0);" />
+      </a>
+      <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
+        <img src="/images/maillogo.png" alt="Mail" class="h-[14px]" style="filter: brightness(0);" />
+      </a>
+    </nav>
+  </div>
+
+  <div class="w-full max-w-5xl mx-auto min-h-screen pt-40 pb-20 px-6 flex flex-col items-center text-center">
+    <img src="/images/towanpattern.png" alt="Pattern" class="h-32 mb-12 opacity-80" />
+    
+    <h1 class="text-lg tracking-[0.2em] font-bold mb-4">TOWAN DIGITAL IMAGE</h1>
+    <h2 class="text-sm tracking-[0.4em] text-neutral-500 mb-12">有機圖王</h2>
+    
+    <p class="w-full max-w-2xl text-sm leading-[2.2] text-neutral-600 mb-16 tracking-wider text-center">
+      前些日子有位年輕人到公司面試，忽然問了一句「為何圖王公司一直在找人」，我喝了一口茶慢慢的告訴他「公司就像一棵樹，他需要水、需要養份、需要陽光和空氣、需要跟動物玩耍、跟昆蟲互動，只要這棵樹還屹立著，這些動作都還是進行式 而非完成式」，所以圖王不是礦石，而是有機物；我們吸收水分、我們補充養分、我們光合作用，我們迎風搖曳。
+    </p>
+
+    <h2 class="text-sm tracking-[0.4em] text-neutral-500 mb-6">夥伴募集</h2>
+    <p class="w-full max-w-2xl text-sm leading-[2.2] text-neutral-600 mb-16 tracking-wider text-center">
+      如網站內的作品一般，是我們近5年來在工作上擂鼓，衝鋒，嘶喊，獻技之後所沉澱下來的畫面，或許再不聞煙硝味，也未見刀劍影，但總有這些畫面存在的重量，方能在喧囂之後 靜謐，無噪，沈著，自觀，... 妳或你是否也曾在心中聽到擂鼓就會想衝鋒， 這裡恰有這麼一方天地，圖王歡迎妳或你...
+    </p>
+
+    <h2 class="text-sm tracking-[0.4em] text-neutral-500 mb-6">開眼美麗</h2>
+    <p class="w-full max-w-2xl text-sm leading-[2.2] text-neutral-600 mb-4 tracking-wider text-center">
+      有位義大利籍的同事出生在米蘭，她曾經告訴過我們「出生後睜開眼的第一瞬間，映入眼簾的盡是美麗的畫面」
+    </p>
+    <p class="w-full max-w-2xl text-sm leading-[2.2] text-neutral-600 mb-16 tracking-wider text-center">
+      我們真心相信美麗的畫面不該只發生在浪漫的歐洲或時尚的米蘭，即便在台灣，我們也期許自身能夠不斷地創造美麗畫面，更希望創造屬於我們自己的「開眼美麗」
+    </p>
+
+    <h2 class="text-sm tracking-[0.4em] text-neutral-500 mb-6">該聽誰的</h2>
+    <p class="w-full max-w-2xl text-sm leading-[2.2] text-neutral-600 mb-4 tracking-wider text-center">
+      提到『設計』大家心中或許都會浮現這麼一句話:「設計的風格該聽誰的…」是的，該聽誰的？業主的？主管的？還是設計師呢？圖王也曾在這個設計的漆黑夜裡抬頭尋找北極星，直到…直到我們看到設計作品的靈魂時，我們清楚了。
+    </p>
+    <p class="w-full max-w-2xl text-sm leading-[2.2] text-neutral-600 mb-16 tracking-wider text-center">
+      我們的設計不為業主的喜好，不為設計師的主觀，只為作品本身清澈的靈魂。
+    </p>
+
+    <h2 class="text-sm tracking-[0.4em] text-neutral-500 mb-6">美學資產</h2>
+    <p class="w-full max-w-2xl text-sm leading-[2.2] text-neutral-600 mb-16 tracking-wider text-center">
+      設計費在一般公司都會被列作費用支出，它是舊規，甚至是陋習，因為我們就遇過聰明的業主，巧妙的將設計作品一件一件的像藝術品般的收藏與陳列，結果造成公司的影響是... 無形的競爭力大方崛起，有形的資產不斷累積。
+    </p>
+  </div>
+</Base>

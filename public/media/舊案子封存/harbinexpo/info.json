@@ -1,0 +1,54 @@
+{
+  "id": "harbinexpo",
+  "title": "HARBIN EXPO",
+  "subtitle": "",
+  "categories": [
+    "EXHIBITION"
+  ],
+  "date": "",
+  "order": 52,
+  "images": [
+    {
+      "filename": "01.jpg",
+      "width": 780,
+      "height": 387,
+      "aspectRatio": 0.496154
+    },
+    {
+      "filename": "02.jpg",
+      "width": 780,
+      "height": 387,
+      "aspectRatio": 0.496154
+    },
+    {
+      "filename": "03.jpg",
+      "width": 780,
+      "height": 433,
+      "aspectRatio": 0.555128
+    },
+    {
+      "filename": "04.jpg",
+      "width": 780,
+      "height": 433,
+      "aspectRatio": 0.555128
+    },
+    {
+      "filename": "05.jpg",
+      "width": 780,
+      "height": 433,
+      "aspectRatio": 0.555128
+    },
+    {
+      "filename": "06.jpg",
+      "width": 780,
+      "height": 669,
+      "aspectRatio": 0.857692
+    },
+    {
+      "filename": "07.jpg",
+      "width": 780,
+      "height": 433,
+      "aspectRatio": 0.555128
+    }
+  ]
+}

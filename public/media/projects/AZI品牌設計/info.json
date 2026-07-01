@@ -1,0 +1,78 @@
+{
+  "id": "AZI品牌設計",
+  "title": "A-ZI",
+  "subtitle": "",
+  "categories": [
+    "IDENTITY"
+  ],
+  "date": "",
+  "order": 19,
+  "images": [
+    {
+      "filename": "01.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "02.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "03.jpg",
+      "width": 780,
+      "height": 365,
+      "aspectRatio": 0.467949
+    },
+    {
+      "filename": "04.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "05.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "06.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "07.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "08.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "09.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "10.jpg",
+      "width": 780,
+      "height": 546,
+      "aspectRatio": 0.7
+    },
+    {
+      "filename": "11.jpg",
+      "width": 780,
+      "height": 390,
+      "aspectRatio": 0.5
+    }
+  ]
+}

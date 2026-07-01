@@ -1,0 +1,120 @@
+{
+  "id": "dawdle",
+  "title": "dawdle",
+  "subtitle": "",
+  "categories": [
+    "ILLUSTRATION"
+  ],
+  "date": "",
+  "order": 113,
+  "images": [
+    {
+      "filename": "01.jpg",
+      "width": 780,
+      "height": 275,
+      "aspectRatio": 0.352564
+    },
+    {
+      "filename": "02.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "03.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "04.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "05.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "06.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "07.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "08.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "09.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "10.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "11.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "12.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "13.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "14.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "15.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "16.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "17.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    },
+    {
+      "filename": "18.jpg",
+      "width": 780,
+      "height": 500,
+      "aspectRatio": 0.641026
+    }
+  ]
+}

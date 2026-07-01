@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Contact — TOWAN" heroNav={true}>
+  <!-- Nav identical position to index.astro -->
+  <div class="fixed z-50 flex items-center justify-between px-8 pt-7 pb-2 pointer-events-none text-black" style="inset: 2.5vh 2.5vw auto 2.5vw;">
+    <a href="/" class="pointer-events-auto hover:opacity-50 transition-opacity">
+      <img src="/images/towanlogo.png" alt="TOWAN" class="h-7" />
+    </a>
+    <nav class="flex gap-7 items-center text-xs tracking-widest uppercase font-normal pointer-events-auto">
+      <a href="/works" class="text-black/60 hover:text-black transition-colors no-underline">WORKS</a>
+      <a href="/about" class="text-black/60 hover:text-black transition-colors no-underline">ABOUT</a>
+      <a href="/contact" class="text-black transition-colors no-underline">CONTACT</a>
+      <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity ml-2">
+        <img src="/images/fblogo.png" alt="FB" class="h-[14px]" style="filter: brightness(0);" />
+      </a>
+      <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
+        <img src="/images/maillogo.png" alt="Mail" class="h-[14px]" style="filter: brightness(0);" />
+      </a>
+    </nav>
+  </div>
+
+  <div class="w-full max-w-5xl mx-auto min-h-screen pt-40 pb-20 px-6 flex flex-col items-center text-center">
+    <h1 class="text-lg tracking-[0.2em] font-bold mb-4">TOWAN DIGITAL IMAGE</h1>
+    <h2 class="text-sm tracking-[0.4em] text-neutral-500 mb-16">圖王數位影像有限公司</h2>
+    
+    <div class="w-full flex flex-col gap-2 text-sm text-neutral-600 mb-12 tracking-widest">
+      <p>T +886 2 8221 8008</p>
+      <p>F +886 2 8221 8005</p>
+      <p class="mt-4">235新北市中和區立德街103號8F</p>
+      <p>（ MIT國際科學園區 第三期 ）</p>
+    </div>
+
+    <!-- Google Map -->
+    <div class="w-full max-w-4xl h-[400px] bg-neutral-100 rounded-lg overflow-hidden shadow-sm">
+      <iframe class="w-full h-full" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;q=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%92%8C%E5%8D%80%E7%AB%8B%E5%BE%B7%E8%A1%97103%E8%99%9F8%E6%A8%93&amp;aq=0&amp;ie=UTF8&amp;t=m&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe>
+    </div>
+  </div>
+</Base>

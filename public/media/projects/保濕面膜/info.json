@@ -1,0 +1,60 @@
+{
+  "id": "保濕面膜",
+  "title": "SHEET MASK",
+  "subtitle": "",
+  "categories": [
+    "PACKAGE"
+  ],
+  "date": "",
+  "order": 14,
+  "images": [
+    {
+      "filename": "01.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "02.jpg",
+      "width": 780,
+      "height": 775,
+      "aspectRatio": 0.99359
+    },
+    {
+      "filename": "03.jpg",
+      "width": 780,
+      "height": 775,
+      "aspectRatio": 0.99359
+    },
+    {
+      "filename": "04.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "05.jpg",
+      "width": 780,
+      "height": 775,
+      "aspectRatio": 0.99359
+    },
+    {
+      "filename": "06.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    },
+    {
+      "filename": "07.jpg",
+      "width": 780,
+      "height": 775,
+      "aspectRatio": 0.99359
+    },
+    {
+      "filename": "08.jpg",
+      "width": 780,
+      "height": 557,
+      "aspectRatio": 0.714103
+    }
+  ]
+}

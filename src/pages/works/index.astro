@@ -1,0 +1,465 @@
+---
+import Base from '../../layouts/Base.astro';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const projects = JSON.parse(readFileSync(join(process.cwd(), 'src/pages/works/index.json'), 'utf-8'));
+
+const pinkCard = { isPink: true, title: 'TOWAN', category: '', image: '' };
+
+// Create finite arrays with Pink Cards at start and end
+const col1 = [pinkCard, ...projects.filter((_, i) => i % 2 === 0), pinkCard];
+const col2 = [pinkCard, ...projects.filter((_, i) => i % 2 === 1), pinkCard];
+const mobileCol = [pinkCard, ...projects, pinkCard];
+
+function renderTile(p: any, isLeftCol: boolean) {
+  if (p.isPink) {
+    return `
+      <div class="tile-wrapper relative w-full">
+        <div class="pink-card block w-full relative aspect-[3/4] flex items-center justify-center pointer-events-none" style="
+          background: rgba(229, 0, 78, 0.85); /* #E5004E with 85% opacity */
+          backdrop-filter: blur(24px) saturate(150%);
+          -webkit-backdrop-filter: blur(24px) saturate(150%);
+        ">
+          <!-- Subtle highlight skin -->
+          <div class="absolute inset-0 pointer-events-none" style="background: rgba(255,255,255,0.05);"></div>
+          <!-- Diagonal light rake -->
+          <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(130deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.02) 100%);"></div>
+          <!-- Grain -->
+          <div class="absolute inset-0 pointer-events-none" style="opacity:0.03; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
+          
+          <!-- Smaller logo centered -->
+          <img src="/images/towanlogoindex.png" alt="TOWAN" class="relative z-10 w-2/5 max-w-[140px] h-auto object-contain" />
+        </div>
+      </div>
+    `;
+  }
+
+  const cover = p.image;
+  if(!cover) return '';
+  
+  const textPosition = isLeftCol ? "right-[calc(100%+2vw)] text-right items-end" : "left-[calc(100%+2vw)] text-left items-start";
+  const colClass = isLeftCol ? "-left-col" : "-right-col";
+
+  const descClass = isLeftCol 
+    ? "right-[100%] w-[16vw] pr-6 text-right" 
+    : "left-[100%] w-[16vw] pl-6 text-left";
+
+  return `
+    <div class="tile-wrapper relative w-full">
+      <a href="/works/${p.id}" class="tile ${colClass} block w-full relative cursor-pointer no-underline group text-black">
+        <div class="tile-inner w-full relative h-full">
+          <img src="${p.image}" alt="${p.title}" class="w-full h-auto block object-cover" />
+        </div>
+        
+        <div class="tile-info hidden md:flex absolute top-1/2 -translate-y-1/2 w-max flex-col gap-1 text-[0.65rem] tracking-[0.15em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ${textPosition}">
+          <span class="text-neutral-500 whitespace-nowrap">${p.category}</span>
+          <span class="font-bold text-sm whitespace-nowrap">${p.title}</span>
+        </div>
+      </a>
+      
+      <div class="tile-desc absolute top-[calc(100%+17.5%+12px)] ${descClass} opacity-0 transition-opacity duration-700 pointer-events-none z-0">
+        <p class="text-[0.65rem] leading-relaxed text-neutral-500 tracking-[0.05em] uppercase font-medium">${p.description || ''}</p>
+      </div>
+    </div>
+  `;
+}
+
+const chunkCol1 = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">${col1.map(p => renderTile(p, true)).join('')}</div>`;
+const chunkCol2 = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">${col2.map(p => renderTile(p, false)).join('')}</div>`;
+const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">${mobileCol.map(p => renderTile(p, false)).join('')}</div>`;
+---
+<Base title="Works — TOWAN" heroNav={true}>
+
+  <!-- 導覽列：參考首頁，固定在上方，字體黑色 -->
+  <div transition:name="header" class="fixed z-50 flex items-center justify-between px-8 pt-7 pb-2 pointer-events-none text-black" style="inset: 2.5vh 2.5vw auto 2.5vw;">
+    <a href="/" class="pointer-events-auto hover:opacity-50 transition-opacity">
+      <img src="/images/towanlogo.png" alt="TOWAN" class="h-7" />
+    </a>
+    <nav class="flex gap-7 items-center text-xs tracking-widest uppercase pointer-events-auto font-normal">
+      <a href="/works" class="text-black/60 hover:text-black transition-colors no-underline">WORKS</a>
+      <a href="/about" class="text-black/60 hover:text-black transition-colors no-underline">ABOUT</a>
+      <a href="/contact" class="text-black/60 hover:text-black transition-colors no-underline">CONTACT</a>
+      <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity ml-2">
+        <img src="/images/fblogo.png" alt="FB" class="h-[14px]" style="filter: brightness(0);" />
+      </a>
+      <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
+        <img src="/images/maillogo.png" alt="Mail" class="h-[14px]" style="filter: brightness(0);" />
+      </a>
+    </nav>
+  </div>
+
+  <!-- 虛擬捲動容器 (背景改為白色 bg-white) -->
+  <div id="scroll-viewport" class="fixed inset-0 overflow-hidden bg-white flex justify-center items-center">
+    
+    <!-- Mobile: 單欄往下捲動 -->
+    <div class="col-wrap md:hidden w-[100vw] h-full relative flex flex-col" data-speed="1" data-dir="-1" data-offset="0">
+      <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkMobile} />
+    </div>
+
+    <!-- Desktop: 雙欄反向交錯，加入適當的間距 -->
+    <div class="hidden md:flex gap-[4px]">
+      <!-- Col 1: 往下走 (dir=1) -->
+      <div class="col-wrap w-[28vw] max-w-[400px] h-full relative" data-speed="1.2" data-dir="1" data-offset="-100">
+        <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol1} />
+      </div>
+      
+      <!-- Col 2: 往上走 (dir=-1) -->
+      <div class="col-wrap w-[28vw] max-w-[400px] h-full relative" data-speed="0.9" data-dir="-1" data-offset="-400">
+        <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol2} />
+      </div>
+    </div>
+    
+  </div>
+</Base>
+
+<style>
+  :global(.tile-wrapper) {
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  /* 平滑縮放過渡 */
+  :global(.tile) {
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    z-index: 1;
+  }
+  
+  :global(.tile.-left-col) {
+    transform-origin: center right;
+  }
+  
+  :global(.tile.-right-col) {
+    transform-origin: center left;
+  }
+  
+
+  
+  /* 點擊時整個專案區塊放大，並提高 z-index */
+  :global(.tile.-active) {
+    transform: scale(1.35) !important;
+    z-index: 50 !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  
+  /* 點擊展開時隱藏所有文字，保持畫面乾淨 */
+  :global(#scroll-viewport.-locked .tile-info) {
+    opacity: 0 !important;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { navigate } from 'astro:transitions/client';
+
+  document.addEventListener('astro:page-load', () => {
+    const viewport = document.getElementById('scroll-viewport');
+    if (!viewport) return;
+
+    let isNavigating = false;
+    let scrollY = 0;
+    let targetY = 0;
+    let isLocked = false;
+    let activeTile = null;
+
+    let maxScrollLimit = 5000;
+
+    // 虛擬滾動
+    const wheelHandler = (e: WheelEvent) => {
+      if (isLocked) unlockAll();
+      
+      // If we are at the top and scrolling up, navigate back to home
+      if (targetY <= 0 && e.deltaY < -20 && !isNavigating) {
+        isNavigating = true;
+        navigate('/');
+        return;
+      }
+
+      targetY += e.deltaY * 1.2;
+      targetY = Math.max(0, Math.min(targetY, maxScrollLimit));
+    };
+    window.addEventListener('wheel', wheelHandler, { passive: true });
+    
+    let touchStartY = 0;
+    const touchStartHandler = (e: TouchEvent) => { touchStartY = e.touches[0].clientY; };
+    window.addEventListener('touchstart', touchStartHandler, { passive: true });
+
+    const touchMoveHandler = (e: TouchEvent) => {
+      if (isLocked) unlockAll();
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchY;
+      
+      if (targetY <= 0 && deltaY < -20 && !isNavigating) {
+        isNavigating = true;
+        navigate('/');
+        return;
+      }
+
+      targetY += deltaY * 2.0;
+      targetY = Math.max(0, Math.min(targetY, maxScrollLimit));
+      touchStartY = touchY;
+    };
+    window.addEventListener('touchmove', touchMoveHandler, { passive: true });
+
+    const cols = Array.from(document.querySelectorAll('.col-wrap'));
+    const colData = cols.map(col => {
+      const inner = col.querySelector('.col-inner');
+      const chunk = inner.querySelector('.chunk');
+      return {
+        el: inner as HTMLElement,
+        chunkEl: chunk as HTMLElement,
+        speed: parseFloat(col.getAttribute('data-speed') || '1'),
+        dir: parseFloat(col.getAttribute('data-dir') || '1'),
+        visualOffset: parseFloat(col.getAttribute('data-offset') || '0'),
+        height: 0,
+        translateY: 0,
+        animOffsetY: 0
+      };
+    });
+
+    // Animate cards staggering in via interwoven waterfall
+    gsap.from('.col-wrap', {
+      opacity: 0,
+      y: (index) => index % 2 === 0 ? '100vh' : '-100vh',
+      stagger: 0.05,
+      duration: 1.5,
+      ease: 'power3.out',
+      delay: 0.1
+    });
+
+    function measure() {
+      let limits: number[] = [];
+      colData.forEach(c => {
+        if (c.chunkEl) {
+          c.height = c.chunkEl.getBoundingClientRect().height;
+          // Only factor in columns that are actually visible (height > 0)
+          if (c.height > 0) {
+            let limit = Math.max(0, (c.height - window.innerHeight - Math.abs(c.visualOffset)) / c.speed);
+            limits.push(limit);
+          }
+        }
+      });
+      if (limits.length > 0) {
+        // Use Math.max so we can scroll until the SLOWEST column finishes
+        maxScrollLimit = Math.max(...limits);
+        targetY = Math.min(targetY, maxScrollLimit);
+      }
+    }
+    
+    // Automatically recalculate limits whenever chunks resize (e.g. images load)
+    const resizeObserver = new ResizeObserver(() => measure());
+    colData.forEach(c => {
+      if (c.chunkEl) resizeObserver.observe(c.chunkEl);
+    });
+    window.addEventListener('resize', measure);
+    setTimeout(measure, 300);
+
+    function renderLoop() {
+      scrollY += (targetY - scrollY) * 0.08;
+
+      if (!isLocked) {
+        colData.forEach(c => {
+          if (c.height === 0) return;
+          
+          let rawY = scrollY * c.speed * c.dir;
+          let baseTranslate = c.dir === 1 ? -(c.height - window.innerHeight) : 0;
+          
+          let targetTrans = baseTranslate + rawY + c.visualOffset + c.animOffsetY;
+
+          // Clamp to physical boundaries to prevent white space
+          if (c.dir === 1) {
+            targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
+            targetTrans = Math.max(targetTrans, baseTranslate + c.visualOffset + c.animOffsetY);
+          } else {
+            targetTrans = Math.max(targetTrans, -(c.height - window.innerHeight) + c.visualOffset + c.animOffsetY);
+            targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
+          }
+          
+          c.translateY = targetTrans;
+          c.el.style.transform = `translateY(${c.translateY}px)`;
+        });
+      }
+    }
+    gsap.ticker.add(renderLoop);
+
+    const tiles = document.querySelectorAll('.tile');
+
+    function activateTile(tile) {
+      const targetWrapper = tile.closest('.tile-wrapper') as HTMLElement;
+      
+      // 取得目標元素當前被推擠的位移量，以便還原它的真實 Y 座標
+      let currentPushY = 0;
+      const currentTransform = targetWrapper.style.transform;
+      if (currentTransform && currentTransform.includes('translateY')) {
+        const match = currentTransform.match(/translateY\(([-\d.]+)px\)/);
+        if (match) currentPushY = parseFloat(match[1]);
+      }
+
+      // 1. 先告訴所有元素取消狀態 (CSS transition 會讓這個過程平滑)
+      tiles.forEach(t => {
+        t.classList.remove('-active');
+        const desc = t.closest('.tile-wrapper')?.querySelector('.tile-desc') as HTMLElement;
+        if (desc) desc.style.opacity = '0';
+      });
+      const wrappers = document.querySelectorAll('.tile-wrapper');
+      wrappers.forEach(w => (w as HTMLElement).style.transform = '');
+      
+      isLocked = true;
+      activeTile = tile;
+      tile.classList.add('-active');
+
+      const targetRect = tile.getBoundingClientRect();
+      // 真實的未推擠中心點 Y
+      const trueTargetCenterY = targetRect.top - currentPushY + targetRect.height / 2;
+      const windowCenterY = window.innerHeight / 2;
+      
+      // 計算放大的精確高度差，以維持 4px 間距
+      const expandScale = 1.35;
+      const pushY = (targetRect.height * (expandScale - 1)) / 2;
+
+      // 處理垂直排擠 (推開同一個直欄的其他元素)
+      const parentCol = tile.closest('.col-wrap');
+      const siblingWrappers = parentCol.querySelectorAll('.tile-wrapper');
+
+      siblingWrappers.forEach(w => {
+        if (w === targetWrapper) return;
+        
+        // 透過 DOM 節點順序判斷是在上方還是下方
+        const isAbove = w.compareDocumentPosition(targetWrapper) & Node.DOCUMENT_POSITION_FOLLOWING;
+        
+        if (isAbove) {
+          (w as HTMLElement).style.transform = `translateY(-${pushY}px)`;
+        } else {
+          (w as HTMLElement).style.transform = `translateY(${pushY}px)`;
+        }
+      });
+
+      // 顯示文案
+      const desc = tile.closest('.tile-wrapper').querySelector('.tile-desc') as HTMLElement;
+      if (desc) {
+        desc.style.opacity = '1';
+      }
+
+      // 將點擊的目標垂直平滑置中
+      const diffY = windowCenterY - trueTargetCenterY;
+      const colIndex = cols.indexOf(parentCol);
+      
+      colData.forEach((c, idx) => {
+        if (idx === colIndex) {
+          gsap.to(c, {
+            animOffsetY: c.animOffsetY + diffY,
+            duration: 0.8,
+            ease: "power3.inOut",
+            onUpdate: () => {
+              const rawY = scrollY * c.speed * c.dir;
+              let baseTranslate = c.dir === 1 ? -(c.height - window.innerHeight) : 0;
+              let targetTrans = baseTranslate + rawY + c.visualOffset + c.animOffsetY;
+              
+              if (c.dir === 1) {
+                targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
+                targetTrans = Math.max(targetTrans, baseTranslate + c.visualOffset + c.animOffsetY);
+              } else {
+                targetTrans = Math.max(targetTrans, -(c.height - window.innerHeight) + c.visualOffset + c.animOffsetY);
+                targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
+              }
+              c.translateY = targetTrans;
+              c.el.style.transform = `translateY(${c.translateY}px)`;
+            }
+          });
+        } else {
+          // 其他欄位歸零
+          gsap.to(c, {
+            animOffsetY: 0,
+            duration: 0.8,
+            ease: "power3.inOut",
+            onUpdate: () => {
+              const rawY = scrollY * c.speed * c.dir;
+              let baseTranslate = c.dir === 1 ? -(c.height - window.innerHeight) : 0;
+              let targetTrans = baseTranslate + rawY + c.visualOffset + c.animOffsetY;
+              
+              if (c.dir === 1) {
+                targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
+                targetTrans = Math.max(targetTrans, baseTranslate + c.visualOffset + c.animOffsetY);
+              } else {
+                targetTrans = Math.max(targetTrans, -(c.height - window.innerHeight) + c.visualOffset + c.animOffsetY);
+                targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
+              }
+              c.translateY = targetTrans;
+              c.el.style.transform = `translateY(${c.translateY}px)`;
+            }
+          });
+        }
+      });
+      
+      viewport.classList.add('-locked');
+    }
+
+    // 圖片點擊事件
+    tiles.forEach((tile) => {
+      tile.addEventListener('click', (e) => {
+        if (isLocked) {
+          // 如果已經有放大的圖片
+          if (tile === activeTile) {
+            // 點擊已經放大的圖片，則觸發跳轉
+            window.location.href = tile.getAttribute('href');
+          } else {
+            // 點擊其他圖片，切換放大
+            e.preventDefault();
+            activateTile(tile);
+          }
+          return;
+        }
+        
+        e.preventDefault();
+        activateTile(tile);
+      });
+    });
+
+    window.addEventListener('click', (e) => {
+      if (isLocked && !e.target.closest('.tile')) {
+        unlockAll();
+      }
+    });
+
+    function unlockAll() {
+      isLocked = false;
+      viewport.classList.remove('-locked');
+
+      tiles.forEach(t => {
+        t.classList.remove('-active');
+        const desc = t.closest('.tile-wrapper')?.querySelector('.tile-desc') as HTMLElement;
+        if (desc) desc.style.opacity = '0';
+      });
+
+      const wrappers = document.querySelectorAll('.tile-wrapper');
+      wrappers.forEach(w => {
+        (w as HTMLElement).style.transform = '';
+      });
+
+      colData.forEach(c => {
+        gsap.to(c, {
+          animOffsetY: 0,
+          duration: 0.8,
+          ease: "power3.inOut",
+          onUpdate: () => {
+            if(!isLocked) {
+              const rawY = scrollY * c.speed * c.dir;
+              let baseTranslate = c.dir === 1 ? -(c.height - window.innerHeight) : 0;
+              c.translateY = baseTranslate + rawY + c.visualOffset + c.animOffsetY;
+              c.el.style.transform = `translateY(${c.translateY}px)`;
+            }
+          }
+        });
+      });
+    }
+    // Clean up on page leave
+    document.addEventListener('astro:before-swap', () => {
+      window.removeEventListener('wheel', wheelHandler);
+      window.removeEventListener('touchstart', touchStartHandler);
+      window.removeEventListener('touchmove', touchMoveHandler);
+      window.removeEventListener('resize', measure);
+      resizeObserver.disconnect();
+      gsap.ticker.remove(renderLoop);
+    }, { once: true });
+  });
+</script>
