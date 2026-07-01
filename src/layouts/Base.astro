@@ -42,12 +42,14 @@ const { title = 'TOWAN 數位影像', heroNav = false } = Astro.props;
         <a href={import.meta.env.BASE_URL + "works"} class="hover:text-neutral-900 transition-colors no-underline">WORKS</a>
         <a href={import.meta.env.BASE_URL + "about"} class="hover:text-neutral-900 transition-colors no-underline">ABOUT</a>
         <a href={import.meta.env.BASE_URL + "contact"} class="hover:text-neutral-900 transition-colors no-underline">CONTACT</a>
-        <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity ml-2">
-          <img src={import.meta.env.BASE_URL + "images/fblogo.png"} alt="FB" class="h-[14px]" style="filter: brightness(0);" />
-        </a>
-        <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
-          <img src={import.meta.env.BASE_URL + "images/maillogo.png"} alt="Mail" class="h-[14px]" style="filter: brightness(0);" />
-        </a>
+        <div class="flex items-center gap-4 ml-1">
+          <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity">
+            <img src={import.meta.env.BASE_URL + "images/fblogo.png"} alt="FB" class="h-[10px]" style="filter: brightness(0);" />
+          </a>
+          <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
+            <img src={import.meta.env.BASE_URL + "images/maillogo.png"} alt="Email" class="h-[10px]" style="filter: brightness(0);" />
+          </a>
+        </div>
       </nav>
     </header>
   )}
