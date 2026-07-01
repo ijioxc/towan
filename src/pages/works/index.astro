@@ -116,8 +116,10 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
 </Base>
 
 <style>
-  :global(#scroll-viewport) {
-    touch-action: none; /* Prevent native scroll conflict */
+  @media (min-width: 768px) {
+    :global(#scroll-viewport) {
+      touch-action: none; /* Prevent native scroll conflict on desktop virtual scroll */
+    }
   }
 
   :global(.col-inner) {
