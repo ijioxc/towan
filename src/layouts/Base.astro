@@ -37,7 +37,7 @@ const { title = 'TOWAN 數位影像', heroNav = false } = Astro.props;
 <body class="bg-white text-neutral-900 antialiased w-full">
   {!heroNav && (
     <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 h-14 bg-white border-b border-neutral-100">
-      <a href={import.meta.env.BASE_URL}><img src={import.meta.env.BASE_URL + "images/towanlogo2.png"} alt="TOWAN" class="h-5" /></a>
+      <a href={import.meta.env.BASE_URL} class="inline-block translate-x-4 translate-y-2"><img src={import.meta.env.BASE_URL + "images/towanlogo2.png"} alt="TOWAN" class="h-5" /></a>
       <nav class="flex gap-7 items-center text-[10px] tracking-widest text-neutral-400 uppercase font-normal">
         <a href={import.meta.env.BASE_URL + "works"} class="hover:text-neutral-900 transition-colors no-underline">WORKS</a>
         <a href={import.meta.env.BASE_URL + "about"} class="hover:text-neutral-900 transition-colors no-underline">ABOUT</a>
