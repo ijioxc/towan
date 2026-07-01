@@ -8,7 +8,7 @@ const projects = JSON.parse(readFileSync(join(process.cwd(), 'src/pages/works/in
 const pinkCard = { isPink: true, title: 'TOWAN', category: '', image: '' };
 
 // Create finite arrays with Pink Cards at start and end
-const col1 = [pinkCard, ...projects.filter((_, i) => i % 2 === 0), pinkCard];
+const col1 = [pinkCard, ...projects.filter((_, i) => i % 2 === 0), pinkCard].reverse();
 const col2 = [pinkCard, ...projects.filter((_, i) => i % 2 === 1), pinkCard];
 const mobileCol = [pinkCard, ...projects, pinkCard];
 
@@ -99,15 +99,15 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
       <div set:html={chunkMobile} />
     </div>
 
-    <!-- Desktop: 雙欄反向交錯，加入適當的間距 (虛擬滾動) -->
+    <!-- Desktop: 雙欄交錯 (一上一下) 虛擬滾動 -->
     <div class="hidden md:flex gap-[4px] h-full items-center">
-      <!-- Col 1: 往上走 (dir=-1) 速度正常 -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="1.0" data-dir="-1" data-offset="100">
+      <!-- Col 1: 往下走 (dir=1) -->
+      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="1.2" data-dir="1" data-offset="450">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol1} />
       </div>
       
-      <!-- Col 2: 往上走 (dir=-1) 稍微慢一點點產生視差 -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="0.85" data-dir="-1" data-offset="220">
+      <!-- Col 2: 往上走 (dir=-1) -->
+      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" data-speed="0.9" data-dir="-1" data-offset="150">
         <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol2} />
       </div>
     </div>
@@ -251,7 +251,14 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
           c.height = c.chunkEl.getBoundingClientRect().height;
           // Only factor in columns that are actually visible (height > 0)
           if (c.height > 0) {
-            let limit = Math.max(0, (c.height - window.innerHeight - Math.abs(c.visualOffset)) / c.speed);
+            let limit = 0;
+            if (c.dir === 1) {
+              // Travels from (-c.height + offset) up to 0 -> distance is c.height - offset
+              limit = Math.max(0, (c.height - c.visualOffset) / c.speed);
+            } else {
+              // Travels from (0 + offset) down to (-c.height + window.innerHeight) -> distance is c.height - window.innerHeight + offset
+              limit = Math.max(0, (c.height - window.innerHeight + c.visualOffset) / c.speed);
+            }
             limits.push(limit);
           }
         }
@@ -280,14 +287,16 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
           if (c.height === 0) return;
           
           let rawY = scrollY * c.speed * c.dir;
-          let baseTranslate = c.dir === 1 ? -(c.height - window.innerHeight) : 0;
+          // dir === -1: Starts at 0 (top of column at top of screen)
+          // dir === 1: Starts at -c.height (bottom of column at top of screen)
+          let baseTranslate = c.dir === 1 ? -c.height : 0;
           
           let targetTrans = baseTranslate + rawY + c.visualOffset + c.animOffsetY;
 
-          // Clamp to physical boundaries to prevent white space
+          // Constrain boundaries so we don't scroll past the ends
           if (c.dir === 1) {
-            targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
-            targetTrans = Math.max(targetTrans, baseTranslate + c.visualOffset + c.animOffsetY);
+            targetTrans = Math.min(targetTrans, 0); // Don't scroll past the top of the column
+            targetTrans = Math.max(targetTrans, -c.height + window.innerHeight); // Don't scroll past the bottom
           } else {
             targetTrans = Math.max(targetTrans, -(c.height - window.innerHeight) + c.visualOffset + c.animOffsetY);
             targetTrans = Math.min(targetTrans, c.visualOffset + c.animOffsetY);
