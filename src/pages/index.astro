@@ -39,7 +39,7 @@ import Base from '../layouts/Base.astro';
         style="opacity:0.045; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
 
       <!-- HOW WE WORK — breathing glow, links to works -->
-      <a href="/works" class="absolute bottom-[12vh] right-[6vw] text-right no-underline group flex flex-col items-end" style="z-index:10">
+      <a href={import.meta.env.BASE_URL + "works"} class="absolute bottom-[12vh] right-[6vw] text-right no-underline group flex flex-col items-end" style="z-index:10">
         <div id="how-we-work-group" class="flex items-center gap-3">
           <p id="how-we-work-text" class="font-semibold tracking-[0.22em] text-white/80 group-hover:text-white transition-colors" style="font-size:clamp(1.1rem,2.1vw,1.6rem);">HOW WE WORK</p>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="relative -top-[1px] text-white/80 group-hover:text-white group-hover:translate-y-2 transition-all duration-300 w-5 h-5 md:w-6 md:h-6"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
@@ -50,16 +50,16 @@ import Base from '../layouts/Base.astro';
 
     <!-- NAV (Extracted from glass panel so it doesn't move during transition) -->
     <div id="header" transition:name="header" class="absolute z-50 flex items-center justify-between px-8 pt-7 pb-2 pointer-events-none transition-colors duration-1000" style="inset: 2.5vh 2.5vw auto 2.5vw;">
-      <a href="/" class="pointer-events-auto hover:opacity-50 transition-opacity"><img src="/images/towanlogo3.png" alt="TOWAN" class="h-7 nav-img" /></a>
+      <a href={import.meta.env.BASE_URL} class="pointer-events-auto hover:opacity-50 transition-opacity"><img src={import.meta.env.BASE_URL + "images/towanlogo3.png"} alt="TOWAN" class="h-7 nav-img" /></a>
       <nav class="flex gap-7 items-center text-xs tracking-widest uppercase font-normal pointer-events-auto nav-links">
-        <a href="/works" class="text-white/60 hover:text-white transition-colors no-underline">WORKS</a>
-        <a href="/about" class="text-white/60 hover:text-white transition-colors no-underline">ABOUT</a>
-        <a href="/contact" class="text-white/60 hover:text-white transition-colors no-underline">CONTACT</a>
+        <a href={import.meta.env.BASE_URL + "works"} class="text-white/60 hover:text-white transition-colors no-underline">WORKS</a>
+        <a href={import.meta.env.BASE_URL + "about"} class="text-white/60 hover:text-white transition-colors no-underline">ABOUT</a>
+        <a href={import.meta.env.BASE_URL + "contact"} class="text-white/60 hover:text-white transition-colors no-underline">CONTACT</a>
         <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity ml-2">
-          <img src="/images/fblogo.png" alt="FB" class="h-[14px] nav-img" style="filter: brightness(0) invert(1);" />
+          <img src={import.meta.env.BASE_URL + "images/fblogo.png"} alt="FB" class="h-[14px] nav-img" style="filter: brightness(0) invert(1);" />
         </a>
         <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
-          <img src="/images/maillogo.png" alt="Mail" class="h-[14px] nav-img" style="filter: brightness(0) invert(1);" />
+          <img src={import.meta.env.BASE_URL + "images/maillogo.png"} alt="Mail" class="h-[14px] nav-img" style="filter: brightness(0) invert(1);" />
         </a>
       </nav>
     </div>
@@ -67,7 +67,7 @@ import Base from '../layouts/Base.astro';
     <!-- Title ABOVE glass panel (z-20) — centered in left half of panel -->
     <div class="absolute z-20 pointer-events-none select-none flex items-center justify-center"
       style="top: 2.5vh; bottom: 2.5vh; left: 2.5vw; width: 47.5vw;">
-      <img id="hero-title" src="/images/towandigitalimage.png" alt="TOWAN DIGITAL IMAGE"
+      <img id="hero-title" src={import.meta.env.BASE_URL + "images/towandigitalimage.png"} alt="TOWAN DIGITAL IMAGE"
         style="height:clamp(9rem,22vw,26rem); width:auto; filter:drop-shadow(0 2px 32px rgba(160,20,50,0.35));" />
     </div>
 
@@ -143,7 +143,7 @@ import Base from '../layouts/Base.astro';
       gsap.to('#header .nav-img', { filter: 'invert(1) brightness(0)', duration: 0.6, ease: 'power2.inOut' });
 
       // Navigate immediately to trigger the 1s seamless crossfade
-      navigate('/works');
+      navigate(import.meta.env.BASE_URL + 'works');
     }
 
     const wheelHandler = (e: WheelEvent) => {

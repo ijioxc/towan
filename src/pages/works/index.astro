@@ -29,7 +29,7 @@ function renderTile(p: any, isLeftCol: boolean) {
           <div class="absolute inset-0 pointer-events-none" style="opacity:0.03; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
           
           <!-- Smaller logo centered -->
-          <img src="/images/towanlogoindex.png" alt="TOWAN" class="relative z-10 w-2/5 max-w-[140px] h-auto object-contain" />
+          <img src="${import.meta.env.BASE_URL}images/towanlogoindex.png" alt="TOWAN" class="relative z-10 w-2/5 max-w-[140px] h-auto object-contain" />
         </div>
       </div>
     `;
@@ -47,9 +47,9 @@ function renderTile(p: any, isLeftCol: boolean) {
 
   return `
     <div class="tile-wrapper relative w-full">
-      <a href="/works/${p.id}" class="tile ${colClass} block w-full relative cursor-pointer no-underline group text-black">
+      <a href="${import.meta.env.BASE_URL}works/${p.id}" class="tile ${colClass} block w-full relative cursor-pointer no-underline group text-black">
         <div class="tile-inner w-full relative h-full">
-          <img src="${p.image}" alt="${p.title}" class="w-full h-auto block object-cover" />
+          <img src="${import.meta.env.BASE_URL}${p.image.replace(/^\//, '')}" alt="${p.title}" class="w-full h-auto block object-cover" />
         </div>
         
         <div class="tile-info hidden md:flex absolute top-1/2 -translate-y-1/2 w-max flex-col gap-1 text-[0.65rem] tracking-[0.15em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ${textPosition}">
@@ -73,18 +73,18 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
 
   <!-- 導覽列：參考首頁，固定在上方，字體黑色 -->
   <div transition:name="header" class="fixed z-50 flex items-center justify-between px-8 pt-7 pb-2 pointer-events-none text-black" style="inset: 2.5vh 2.5vw auto 2.5vw;">
-    <a href="/" class="pointer-events-auto hover:opacity-50 transition-opacity">
-      <img src="/images/towanlogo.png" alt="TOWAN" class="h-7" />
+    <a href={import.meta.env.BASE_URL} class="pointer-events-auto hover:opacity-50 transition-opacity">
+      <img src={import.meta.env.BASE_URL + "images/towanlogo.png"} alt="TOWAN" class="h-7" />
     </a>
     <nav class="flex gap-7 items-center text-xs tracking-widest uppercase pointer-events-auto font-normal">
-      <a href="/works" class="text-black/60 hover:text-black transition-colors no-underline">WORKS</a>
-      <a href="/about" class="text-black/60 hover:text-black transition-colors no-underline">ABOUT</a>
-      <a href="/contact" class="text-black/60 hover:text-black transition-colors no-underline">CONTACT</a>
+      <a href={import.meta.env.BASE_URL + "works"} class="text-black/60 hover:text-black transition-colors no-underline">WORKS</a>
+      <a href={import.meta.env.BASE_URL + "about"} class="text-black/60 hover:text-black transition-colors no-underline">ABOUT</a>
+      <a href={import.meta.env.BASE_URL + "contact"} class="text-black/60 hover:text-black transition-colors no-underline">CONTACT</a>
       <a href="https://www.facebook.com/%E5%9C%96%E7%8E%8B%E6%95%B8%E4%BD%8D%E5%BD%B1%E5%83%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8-1418615315071832/" target="_blank" class="hover:opacity-60 transition-opacity ml-2">
-        <img src="/images/fblogo.png" alt="FB" class="h-[14px]" style="filter: brightness(0);" />
+        <img src={import.meta.env.BASE_URL + "images/fblogo.png"} alt="FB" class="h-[14px]" style="filter: brightness(0);" />
       </a>
       <a href="mailto:towan@towan.com.tw" class="hover:opacity-60 transition-opacity">
-        <img src="/images/maillogo.png" alt="Mail" class="h-[14px]" style="filter: brightness(0);" />
+        <img src={import.meta.env.BASE_URL + "images/maillogo.png"} alt="Mail" class="h-[14px]" style="filter: brightness(0);" />
       </a>
     </nav>
   </div>
@@ -171,7 +171,7 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
       // If we are at the top and scrolling up, navigate back to home
       if (targetY <= 0 && e.deltaY < -20 && !isNavigating) {
         isNavigating = true;
-        navigate('/');
+        navigate(import.meta.env.BASE_URL);
         return;
       }
 
@@ -191,7 +191,7 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
       
       if (targetY <= 0 && deltaY < -20 && !isNavigating) {
         isNavigating = true;
-        navigate('/');
+        navigate(import.meta.env.BASE_URL);
         return;
       }
 
