@@ -18,15 +18,13 @@ function renderTile(p: any, isLeftCol: boolean) {
       <div class="tile-wrapper relative w-full">
         <div class="pink-card block w-full relative aspect-[3/4] flex items-center justify-center pointer-events-none" style="
           background: rgba(229, 0, 78, 0.85); /* #E5004E with 85% opacity */
-          backdrop-filter: blur(24px) saturate(150%);
-          -webkit-backdrop-filter: blur(24px) saturate(150%);
+          backdrop-filter: blur(12px) saturate(150%);
+          -webkit-backdrop-filter: blur(12px) saturate(150%);
         ">
           <!-- Subtle highlight skin -->
           <div class="absolute inset-0 pointer-events-none" style="background: rgba(255,255,255,0.05);"></div>
           <!-- Diagonal light rake -->
           <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(130deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.02) 100%);"></div>
-          <!-- Grain -->
-          <div class="absolute inset-0 pointer-events-none" style="opacity:0.03; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
           
           <!-- Smaller logo centered -->
           <img src="${import.meta.env.BASE_URL}images/towanlogoindex.png" alt="TOWAN" class="relative z-10 w-2/5 max-w-[140px] h-auto object-contain" />
@@ -115,6 +113,14 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
 </Base>
 
 <style>
+  :global(#scroll-viewport) {
+    touch-action: none; /* Prevent native scroll conflict */
+  }
+
+  :global(.col-inner) {
+    will-change: transform; /* Hardware acceleration */
+  }
+
   :global(.tile-wrapper) {
     transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
   }
@@ -196,7 +202,7 @@ const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">
         return;
       }
 
-      targetY += deltaY * 2.0;
+      targetY += deltaY * 1.5;
       targetY = Math.max(0, Math.min(targetY, maxScrollLimit));
       touchStartY = touchY;
     };
