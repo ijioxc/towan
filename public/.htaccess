@@ -1,0 +1,31 @@
+# TOWAN — Apache rules for the production host (towan.com.tw).
+# Inert on GitHub Pages. Requires base '/' in astro.config.mjs when deployed to site root.
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Works added from the admin panel have no pre-built page:
+  # fall back to the runtime detail page. Pre-built /works/<id>/ dirs win.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^works/([^/]+)/?$ works/view/index.html?id=$1 [L,QSA]
+</IfModule>
+
+# 圖片與靜態資源快取(回訪與換頁不重抓);html/json 保持即時
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/gif "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+</IfModule>
+<IfModule mod_headers.c>
+  <FilesMatch "\.(json|html)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

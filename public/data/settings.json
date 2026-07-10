@@ -1,0 +1,14 @@
+{
+  "work": {
+    "title_size_desktop": 32,
+    "title_size_mobile": 26,
+    "subtitle_size": 14,
+    "services_size": 12,
+    "head_pad_top": 96,
+    "head_pad_bottom": 32,
+    "hero_aspect": 7,
+    "hero_overlay_y": 0,
+    "content_gap": 80,
+    "content_width": 850
+  }
+}

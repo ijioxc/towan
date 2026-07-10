@@ -1,282 +1,408 @@
 ---
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
-const projects = JSON.parse(readFileSync(join(process.cwd(), 'src/pages/works/index.json'), 'utf-8'));
-
-const pinkCard = { isPink: true, title: 'TOWAN', category: '', image: '' };
-
-const col1 = [pinkCard, ...projects.filter((_, i) => i % 2 === 0), pinkCard].reverse();
-const col2 = [pinkCard, ...projects.filter((_, i) => i % 2 === 1), pinkCard];
-const mobileCol = [pinkCard, ...projects, pinkCard];
-
-function renderTile(p: any, isLeftCol: boolean) {
-  if (p.isPink) {
-    return `
-      <div class="tile-wrapper relative w-full">
-        <div class="pink-card block w-full relative aspect-[3/4] flex items-center justify-center pointer-events-none" style="
-          background: rgba(229, 0, 78, 0.85);
-          backdrop-filter: blur(12px) saturate(150%);
-          -webkit-backdrop-filter: blur(12px) saturate(150%);
-        ">
-          <div class="absolute inset-0 pointer-events-none" style="background: rgba(255,255,255,0.05);"></div>
-          <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(130deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.02) 100%);"></div>
-          <img src="${import.meta.env.BASE_URL}images/towanlogoindex.png" alt="TOWAN" class="relative z-10 w-2/5 max-w-[140px] h-auto object-contain" />
-        </div>
-      </div>
-    `;
-  }
-
-  const cover = p.image;
-  if(!cover) return '';
-  
-  const textPosition = isLeftCol ? "right-[calc(100%+2vw)] text-right items-end" : "left-[calc(100%+2vw)] text-left items-start";
-  const colClass = isLeftCol ? "-left-col" : "-right-col";
-
-  const descClass = isLeftCol 
-    ? "right-[100%] w-[16vw] pr-6 text-right" 
-    : "left-[100%] w-[16vw] pl-6 text-left";
-
-  const isAbsolute = cover.startsWith('http');
-  const srcUrl = isAbsolute ? cover : `${import.meta.env.BASE_URL}${cover.replace(/^\//, '')}`;
-
-  return `
-    <div class="tile-wrapper relative w-full">
-      <a href="${import.meta.env.BASE_URL}works/${p.id}" class="tile ${colClass} block w-full relative cursor-pointer no-underline group text-black">
-        <div class="tile-inner w-full relative h-full">
-          <img src="${srcUrl}" alt="${p.title}" class="w-full h-auto block object-cover" />
-        </div>
-        
-        <div class="tile-info hidden md:flex absolute top-1/2 -translate-y-1/2 w-max flex-col gap-1 text-[0.65rem] tracking-[0.15em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ${textPosition}">
-          <span class="text-neutral-500 whitespace-nowrap">${p.category}</span>
-          <span class="font-bold text-sm whitespace-nowrap">${p.title}</span>
-        </div>
-      </a>
-      
-      <div class="tile-desc absolute top-[calc(100%+17.5%+12px)] ${descClass} opacity-0 transition-opacity duration-700 pointer-events-none z-0">
-        <p class="text-[0.65rem] leading-relaxed text-neutral-500 tracking-[0.05em] uppercase font-medium">${p.description || ''}</p>
-      </div>
-    </div>
-  `;
-}
-
-const chunkCol1 = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">${col1.map(p => renderTile(p, true)).join('')}</div>`;
-const chunkCol2 = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">${col2.map(p => renderTile(p, false)).join('')}</div>`;
-const chunkMobile = `<div class="chunk w-full flex flex-col gap-[4px] pb-[4px]">${mobileCol.map(p => renderTile(p, false)).join('')}</div>`;
 ---
 
-<section id="works-section" class="relative w-full bg-white text-black min-h-screen">
-  
-  <!-- Mobile: Normal Native Scroll -->
-  <div class="md:hidden w-[85vw] mx-auto py-[12vh] flex flex-col">
-    <div set:html={chunkMobile} />
-  </div>
+<!-- 背景由共用的 #stage-bg 提供:hero 幻燈片捲動時液態玻璃化,無縫成為此區背景 -->
+<section id="works-section" class="relative z-10 w-full text-neutral-900">
 
-  <!-- Desktop: ScrollTrigger Pinned Virtual Scroll -->
-  <div id="works-desktop" class="hidden md:flex h-screen w-full justify-center items-center overflow-hidden relative">
-    <div class="flex gap-[4px] h-full items-center w-full justify-center">
-      <!-- Col 1 -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" id="col1-wrap">
-        <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol1} id="col1-inner" />
-      </div>
-      
-      <!-- Col 2 -->
-      <div class="col-wrap w-[22vw] max-w-[320px] h-full relative" id="col2-wrap">
-        <div class="col-inner absolute top-0 left-0 w-full" set:html={chunkCol2} id="col2-inner" />
-      </div>
-    </div>
+  <div class="relative z-10">
+
+    <!-- Gallery intro — 從 hero 落下後的第一個畫面 -->
+    <header class="flex flex-col items-center justify-center text-center pt-[15vh] pb-[8vh] px-6 select-none">
+      <p class="text-[0.6rem] tracking-[0.5em] text-neutral-400 mb-6">SELECTED WORKS</p>
+      <p id="works-count" class="mt-7 text-[0.65rem] tracking-[0.35em] text-neutral-400" style="font-variant-numeric: tabular-nums;">2008 — PRESENT</p>
+    </header>
+
+    <!-- 長卷軸畫廊(JS 注入) -->
+    <div id="works-gallery" class="relative w-full max-w-[1600px] mx-auto px-5 md:px-[6vw] pb-[8vh]"></div>
+
+    <!-- Gallery end -->
+    <footer class="flex flex-col items-center justify-center text-center pt-[8vh] pb-[12vh] px-6">
+      <span class="wk-int-line"></span>
+      <p class="mt-8 text-[0.6rem] tracking-[0.5em] text-neutral-400">TOWAN DIGITAL IMAGE</p>
+      <p class="mt-5 max-w-md text-sm leading-[2.3] tracking-wider text-neutral-600">讓我們一起,創造屬於你的美麗畫面。</p>
+      <a href={import.meta.env.BASE_URL + "contact"} class="mt-9 text-[0.62rem] tracking-[0.4em] text-neutral-400 hover:text-neutral-900 transition-colors duration-500 no-underline">GET IN TOUCH →</a>
+    </footer>
+
   </div>
 
 </section>
 
-<style>
-  :global(.tile-wrapper) {
-    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-  }
-  :global(.tile) {
-    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+<style is:global>
+  /* preflight 未全域生效,區域內自行確保 border-box,避免 width:100% + padding 溢出 */
+  #works-section,
+  #works-section *,
+  #works-section *::before,
+  #works-section *::after { box-sizing: border-box; }
+
+  /* ---------- 畫廊節奏:中央大圖 / 左 / 右 交錯(大膽縮小,呼吸感加倍) ---------- */
+  #works-gallery .wk-item {
     position: relative;
-    z-index: 1;
+    width: 100%;
+    margin: 8vh auto;
   }
-  :global(.tile.-left-col) { transform-origin: center right; }
-  :global(.tile.-right-col) { transform-origin: center left; }
-  :global(.tile.-active) {
-    transform: scale(1.35) !important;
-    z-index: 50 !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  @media (min-width: 768px) {
+    #works-gallery .wk-item--c { width: min(42%, 460px); margin: 8vh auto; }
+    #works-gallery .wk-item--l { width: min(30%, 360px); margin: 4vh auto 4vh 8%; }
+    #works-gallery .wk-item--r { width: min(30%, 360px); margin: 4vh 8% 4vh auto; }
   }
-  :global(#works-desktop.-locked .tile-info) { opacity: 0 !important; }
+
+  /* 編號(左上,僅數字) */
+  #works-gallery .wk-meta {
+    margin-bottom: 13px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(23, 23, 23, 0.38);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- 卡片:點擊懸浮凸起 ---------- */
+  #works-gallery .wk-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #e9e9ec;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 1px 3px rgba(20, 20, 30, 0.07), 0 8px 24px rgba(20, 20, 30, 0.06);
+    transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.55s ease;
+    will-change: transform;
+  }
+  @media (hover: hover) {
+    #works-gallery .wk-item:not(.is-open) .wk-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 2px 6px rgba(20, 20, 30, 0.07), 0 18px 40px rgba(20, 20, 30, 0.12);
+    }
+  }
+  #works-gallery .wk-item.is-open .wk-card {
+    transform: translateY(-10px) scale(1.015);
+    box-shadow: 0 4px 10px rgba(20, 20, 30, 0.08), 0 34px 70px rgba(20, 20, 30, 0.2);
+  }
+  #works-gallery .wk-media {
+    position: relative;
+    aspect-ratio: 7 / 4;
+    overflow: hidden;
+  }
+  /* 視差層:比框高 14%,由 GSAP 上下位移 */
+  #works-gallery .wk-par {
+    position: absolute;
+    inset: -7% 0;
+    will-change: transform;
+  }
+  #works-gallery .wk-par img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ---------- 圖下方:分類(右)+ 點擊展開的文案(左) ---------- */
+  #works-gallery .wk-below {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 12px;
+  }
+  #works-gallery .wk-cat {
+    flex: 0 0 auto;
+    order: 2;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: rgba(23, 23, 23, 0.38);
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+  #works-gallery .wk-copy {
+    flex: 1 1 auto;
+    order: 1;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  #works-gallery .wk-copy-in {
+    overflow: hidden;
+    min-height: 0;
+    text-align: left;
+  }
+  #works-gallery .wk-item.is-open .wk-copy { grid-template-rows: 1fr; }
+
+  #works-gallery .wk-copy-in > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  #works-gallery .wk-item.is-open .wk-copy-in > * { opacity: 1; transform: none; }
+  #works-gallery .wk-item.is-open .wk-copy-in > *:nth-child(2) { transition-delay: 0.08s; }
+  #works-gallery .wk-item.is-open .wk-copy-in > *:nth-child(3) { transition-delay: 0.16s; }
+  #works-gallery .wk-item.is-open .wk-copy-in > *:nth-child(4) { transition-delay: 0.26s; }
+
+  #works-gallery .wk-title {
+    padding-top: 8px;
+    font-size: clamp(1.05rem, 2vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+    color: #171717;
+  }
+  #works-gallery .wk-sub {
+    margin-top: 6px;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    color: rgba(23, 23, 23, 0.62);
+  }
+  #works-gallery .wk-desc {
+    margin-top: 12px;
+    max-width: 46ch;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    line-height: 1.8;
+    color: rgba(23, 23, 23, 0.55);
+  }
+
+  /* ---------- 間場:about 段落的呼吸空間 ---------- */
+  #works-gallery .wk-interlude {
+    min-height: 32vh;
+    width: 100% !important;
+    margin: 6vh auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
+  }
+  .wk-int-line {
+    display: block;
+    width: 1px;
+    height: 64px;
+    background: linear-gradient(to bottom, rgba(23, 23, 23, 0), rgba(23, 23, 23, 0.35));
+  }
+  #works-gallery .wk-interlude h3 {
+    margin: 30px 0 24px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.55em;
+    text-indent: 0.55em; /* 平衡置中 */
+    color: rgba(23, 23, 23, 0.5);
+  }
+  #works-gallery .wk-interlude p {
+    max-width: 34em;
+    font-size: 0.85rem;
+    line-height: 2.4;
+    letter-spacing: 0.09em;
+    color: rgba(23, 23, 23, 0.62);
+  }
+  #works-gallery .wk-interlude a {
+    margin-top: 32px;
+    font-size: 0.58rem;
+    letter-spacing: 0.4em;
+    color: rgba(23, 23, 23, 0.35);
+    text-decoration: none;
+    transition: color 0.4s ease;
+  }
+  #works-gallery .wk-interlude a:hover { color: #171717; }
 </style>
 
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-  document.addEventListener('astro:page-load', () => {
-    const worksSection = document.getElementById('works-section');
-    if (!worksSection) return;
+  // 穿插於作品之間的 about 段落(節錄自 about 頁)
+  const INTERLUDES = [
+    {
+      head: '有機圖王',
+      text: '圖王不是礦石,而是有機物;我們吸收水分、我們補充養分、我們光合作用,我們迎風搖曳。',
+    },
+    {
+      head: '開眼美麗',
+      text: '「出生後睜開眼的第一瞬間,映入眼簾的盡是美麗的畫面。」我們期許自身不斷地創造美麗畫面,創造屬於我們自己的「開眼美麗」。',
+    },
+    {
+      head: '該聽誰的',
+      text: '我們的設計不為業主的喜好,不為設計師的主觀,只為作品本身清澈的靈魂。',
+    },
+    {
+      head: '沉澱',
+      text: '這些作品,是我們在工作上擂鼓、衝鋒、嘶喊、獻技之後所沉澱下來的畫面 —— 喧囂之後,靜謐、無噪、沉著、自觀。',
+    },
+    {
+      head: '美學資產',
+      text: '將設計作品一件一件、像藝術品般的收藏與陳列 —— 無形的競爭力大方崛起,有形的資產不斷累積。',
+    },
+  ];
 
-    let mm = gsap.matchMedia();
+  document.addEventListener('astro:page-load', async () => {
+    const gallery = document.getElementById('works-gallery');
+    if (!gallery) return;
 
-    mm.add("(min-width: 768px)", () => {
-      const col1Inner = document.getElementById('col1-inner');
-      const col2Inner = document.getElementById('col2-inner');
-      const worksDesktop = document.getElementById('works-desktop');
-      
-      if(!col1Inner || !col2Inner || !worksDesktop) return;
+    const BASE = import.meta.env.BASE_URL;
 
-      const h1 = col1Inner.getBoundingClientRect().height;
-      const h2 = col2Inner.getBoundingClientRect().height;
-      const winH = window.innerHeight;
+    // 背景幻燈片改由共用的 #stage-bg 播放(見 StageBackground.astro)
 
-      // Ensure images are fully loaded before finalizing heights
-      // But we can approximate for now
-      
-      const start1 = -h1 + 450;
-      const end1 = 0;
+    let projects: any[] = [];
+    try {
+      const res = await fetch(BASE + 'data/works.json');
+      if (!res.ok) throw new Error('Failed to fetch works data');
+      projects = (await res.json()).filter((p: any) => p.image);
+    } catch (err) {
+      console.error('Failed to load works data:', err);
+      return;
+    }
 
-      const start2 = 500;
-      const end2 = -h2 + winH;
+    const total = projects.length;
+    const countEl = document.getElementById('works-count');
+    if (countEl) countEl.textContent = `${String(total).padStart(3, '0')} WORKS / 2008 — PRESENT`;
 
-      const scrollDistance = Math.max(h1, h2) * 1.5;
+    const esc = (s: any) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const srcOf = (img: string) => img.startsWith('http') ? img : BASE + img.replace(/^\//, '');
 
-      gsap.set(col1Inner, { y: start1 });
-      gsap.set(col2Inner, { y: start2 });
+    // 每隔 step 件作品插入一段間場文字
+    const step = Math.ceil(total / (INTERLUDES.length + 1));
+    const alignCycle = ['c', 'l', 'r']; // 中央大圖 → 左 → 右,循環
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: worksDesktop,
-          start: "top top",
-          end: "+=" + scrollDistance,
-          scrub: 1.2,
-          pin: true,
-          anticipatePin: 1
-        }
-      });
+    let html = '';
+    let interludeIdx = 0;
 
-      tl.to(col1Inner, { y: end1, ease: "none" }, 0);
-      tl.to(col2Inner, { y: end2, ease: "none" }, 0);
+    projects.forEach((p: any, i: number) => {
+      const align = alignCycle[i % alignCycle.length];
+      const num = String(i + 1).padStart(3, '0');
 
-      // Handle interactions
-      const tiles = worksDesktop.querySelectorAll('.tile');
-      let activeTile: Element | null = null;
-      let isLocked = false;
+      html += `
+        <div class="wk-item wk-item--${align}">
+          <div class="wk-meta">${num} / ${String(total).padStart(3, '0')}</div>
+          <a class="wk-card" href="${BASE}works/view?id=${encodeURIComponent(p.id)}" aria-label="${esc(p.title)}">
+            <div class="wk-media">
+              <div class="wk-par">
+                <img src="${srcOf(p.image)}" alt="${esc(p.title)}" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </a>
+          <div class="wk-below">
+            <div class="wk-copy">
+              <div class="wk-copy-in">
+                <h3 class="wk-title">${esc(p.title)}</h3>
+                <p class="wk-sub">${esc(p.subtitle)}</p>
+                ${p.description ? `<p class="wk-desc">${esc(p.description)}</p>` : ''}
+              </div>
+            </div>
+            <span class="wk-cat">${esc(p.category)}</span>
+          </div>
+        </div>
+      `;
 
-      function activateTile(tile: HTMLElement) {
-        // Unlock if another is active
-        if (activeTile && activeTile !== tile) {
-          unlockAll();
-        }
-
-        activeTile = tile;
-        isLocked = true;
-        worksDesktop?.classList.add('-locked');
-
-        // Find parent column and wrapper
-        const wrapper = tile.closest('.tile-wrapper') as HTMLElement;
-        const colWrap = tile.closest('.col-wrap') as HTMLElement;
-        const isCol1 = colWrap.id === 'col1-wrap';
-
-        // Animate tile itself
-        tile.classList.add('-active');
-        const desc = wrapper.querySelector('.tile-desc') as HTMLElement;
-        if (desc) desc.style.opacity = '1';
-
-        // Calculate scroll target to center this tile
-        // local Y of the tile center relative to the column inner
-        const tileRect = tile.getBoundingClientRect();
-        const innerRect = (isCol1 ? col1Inner : col2Inner).getBoundingClientRect();
-        
-        // This calculates the center of the tile relative to the top of its column
-        const tileCenterLocal = (tileRect.top - innerRect.top) + (tileRect.height / 2);
-        
-        const start = isCol1 ? start1 : start2;
-        const end = isCol1 ? end1 : end2;
-        
-        // We want: start + progress * (end - start) + tileCenterLocal = winH / 2
-        // progress = (winH / 2 - tileCenterLocal - start) / (end - start)
-        let progress = (winH / 2 - tileCenterLocal - start) / (end - start);
-        
-        // Clamp progress
-        progress = Math.max(0, Math.min(1, progress));
-
-        const triggerStart = tl.scrollTrigger?.start || 0;
-        const targetScrollY = triggerStart + progress * scrollDistance;
-
-        // Use Lenis to scroll smoothly
-        if ((window as any).lenis) {
-          (window as any).lenis.scrollTo(targetScrollY, { duration: 1.2, easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-          
-          // Lock lenis after scrolling
-          setTimeout(() => {
-            if (isLocked) (window as any).lenis.stop();
-          }, 1200);
-        }
-
-        // Push siblings
-        const siblingWrappers = colWrap.querySelectorAll('.tile-wrapper');
-        const expandScale = 1.35;
-        const pushY = (tileRect.height * (expandScale - 1)) / 2;
-
-        siblingWrappers.forEach(w => {
-          if (w === wrapper) return;
-          const isAbove = w.compareDocumentPosition(wrapper) & Node.DOCUMENT_POSITION_FOLLOWING;
-          if (isAbove) {
-            (w as HTMLElement).style.transform = `translateY(-${pushY}px)`;
-          } else {
-            (w as HTMLElement).style.transform = `translateY(${pushY}px)`;
-          }
-        });
+      // 間場
+      if ((i + 1) % step === 0 && interludeIdx < INTERLUDES.length && i < total - 1) {
+        const s = INTERLUDES[interludeIdx++];
+        html += `
+          <div class="wk-item wk-interlude">
+            <span class="wk-int-line"></span>
+            <h3>${s.head}</h3>
+            <p>${s.text}</p>
+            <a href="${BASE}about">MORE ABOUT TOWAN →</a>
+          </div>
+        `;
       }
-
-      function unlockAll() {
-        isLocked = false;
-        worksDesktop?.classList.remove('-locked');
-        if ((window as any).lenis) {
-          (window as any).lenis.start();
-        }
-
-        tiles.forEach(t => {
-          t.classList.remove('-active');
-          const desc = t.closest('.tile-wrapper')?.querySelector('.tile-desc') as HTMLElement;
-          if (desc) desc.style.opacity = '0';
-        });
-
-        const wrappers = worksDesktop?.querySelectorAll('.tile-wrapper');
-        wrappers?.forEach(w => {
-          (w as HTMLElement).style.transform = '';
-        });
-        activeTile = null;
-      }
-
-      tiles.forEach((tile) => {
-        tile.addEventListener('click', (e) => {
-          if (isLocked) {
-            if (tile === activeTile) {
-              window.location.href = tile.getAttribute('href') || '';
-            } else {
-              e.preventDefault();
-              activateTile(tile as HTMLElement);
-            }
-            return;
-          }
-          
-          e.preventDefault();
-          activateTile(tile as HTMLElement);
-        });
-      });
-
-      window.addEventListener('click', (e) => {
-        if (isLocked && !(e.target as Element).closest('.tile')) {
-          unlockAll();
-        }
-      });
-
-      return () => {
-        tl.kill();
-      };
     });
+
+    gallery.innerHTML = html;
+
+    /* ---------- 兩段式點擊:一按懸浮凸起 + 展開文案,再按進入 ---------- */
+    const closeAll = (except?: Element | null) => {
+      gallery.querySelectorAll('.wk-item.is-open').forEach((c) => { if (c !== except) c.classList.remove('is-open'); });
+    };
+
+    const ac = new AbortController();
+    const { signal } = ac;
+
+    // 點擊追蹤:平滑捲動,把該作品置中於視窗
+    const centerOn = (el: Element) => {
+      const rect = el.getBoundingClientRect();
+      const target = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
+      gsap.to(window, {
+        scrollTo: { y: Math.max(0, target), autoKill: true },
+        duration: 0.9,
+        ease: 'power2.inOut',
+      });
+    };
+
+    gallery.addEventListener('click', (e) => {
+      const card = (e.target as Element).closest('a.wk-card');
+      if (!card) return;
+      const item = card.closest('.wk-item')!;
+      if (!item.classList.contains('is-open')) {
+        e.preventDefault();
+        closeAll(item);
+        item.classList.add('is-open');
+        // 展開文案會改變高度,等版面穩定後再置中
+        requestAnimationFrame(() => requestAnimationFrame(() => centerOn(card)));
+      }
+      // 已開啟 → 放行,自然導向作品頁
+    }, { signal });
+
+    document.addEventListener('click', (e) => {
+      if (!(e.target as Element).closest('.wk-card')) closeAll();
+    }, { signal });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAll();
+    }, { signal });
+
+    /* ---------- 滾動效果 ---------- */
+    const triggers: ScrollTrigger[] = [];
+
+    // 進場顯現:淡入 + 上浮
+    gallery.querySelectorAll('.wk-item').forEach((el) => {
+      const isInterlude = el.classList.contains('wk-interlude');
+      const tween = gsap.fromTo(el,
+        { autoAlpha: 0, y: isInterlude ? 40 : 72 },
+        {
+          autoAlpha: 1, y: 0,
+          duration: isInterlude ? 1.6 : 1.15,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        }
+      );
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    });
+
+    // 間場的線:緩緩長出
+    gallery.querySelectorAll('.wk-interlude .wk-int-line').forEach((el) => {
+      const tween = gsap.fromTo(el,
+        { scaleY: 0, transformOrigin: 'top center' },
+        {
+          scaleY: 1, duration: 1.4, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 82%', once: true },
+        }
+      );
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    });
+
+    // 圖片視差:滾過時緩慢位移
+    gallery.querySelectorAll('.wk-par').forEach((el) => {
+      const tween = gsap.fromTo(el,
+        { yPercent: -5 },
+        {
+          yPercent: 5, ease: 'none',
+          scrollTrigger: {
+            trigger: el.closest('.wk-media'),
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        }
+      );
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    });
+
+    // 換頁時清乾淨,避免 ScrollTrigger 疊加
+    document.addEventListener('astro:before-swap', () => {
+      triggers.forEach((t) => t.kill());
+      ac.abort();
+    }, { once: true });
   });
 </script>

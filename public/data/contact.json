@@ -1,0 +1,10 @@
+{
+  "blocks": [
+    { "type": "h1", "text": "TOWAN DIGITAL IMAGE", "size": 18, "mb": 16 },
+    { "type": "h2", "text": "圖王數位影像有限公司", "size": 14, "mb": 64 },
+    { "type": "p", "text": "T +886 2 8221 8008", "size": 14, "mb": 8, "leading": 1.6 },
+    { "type": "p", "text": "F +886 2 8221 8005", "size": 14, "mb": 24, "leading": 1.6 },
+    { "type": "p", "text": "235新北市中和區立德街103號8F", "size": 14, "mb": 8, "leading": 1.6 },
+    { "type": "p", "text": "（ MIT國際科學園區 第三期 ）", "size": 14, "mb": 48, "leading": 1.6 }
+  ]
+}

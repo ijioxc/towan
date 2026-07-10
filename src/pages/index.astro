@@ -1,15 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
+import StageBackground from '../components/StageBackground.astro';
 import HeroSection from '../components/HeroSection.astro';
 import WorksSection from '../components/WorksSection.astro';
 ---
 
 <Base title="TOWAN 數位影像" heroNav={true}>
-  
+
+  <!-- 首頁 hero 與作品區共用的幻燈片背景 -->
+  <StageBackground />
+
   <!-- Dynamic NAV for the SPA -->
-  <div id="spa-header" class="box-border fixed z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none transition-colors duration-500" style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
+  <div id="spa-header" class="box-border fixed z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none transition-all duration-500 rounded-[2rem] border border-transparent" style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
     <a href={import.meta.env.BASE_URL} class="pointer-events-auto hover:opacity-50 transition-opacity inline-block translate-x-4 translate-y-2">
-      <img src={import.meta.env.BASE_URL + "images/towanlogo3.png"} alt="TOWAN" class="h-5 nav-img transition-all duration-500" />
+      <img src={import.meta.env.BASE_URL + "images/towanlogo-WT.png"} alt="TOWAN" class="h-5 nav-img transition-all duration-500" />
     </a>
     <nav class="flex items-center text-[10px] sm:text-xs tracking-widest uppercase font-normal pointer-events-auto nav-links">
       <a href="#works-section" class="text-white/60 hover:text-white transition-colors duration-500 no-underline mr-2 sm:mr-4 md:mr-7">WORKS</a>
@@ -53,22 +57,14 @@ import WorksSection from '../components/WorksSection.astro';
       });
     }
 
-    // Change nav colors based on scroll position
-    // We trigger the color change when the Works section hits the top of the screen
-    ScrollTrigger.create({
-      trigger: "#works-section",
-      start: "top 5%", // when top of works section hits 5% from top of viewport
-      onEnter: () => setNavDark(),
-      onLeaveBack: () => setNavLight()
-    });
-
-    const base = import.meta.env.BASE_URL;
-
     function setNavDark() {
-      const img = document.querySelector('#spa-header .nav-img') as HTMLImageElement;
-      if (img) img.src = base + "images/towanlogo2.png";
+      // Switch logo to dark version or apply filter
+      gsap.to('#spa-header .nav-img', { filter: 'invert(1) brightness(0)', duration: 0.5 });
       gsap.to('#spa-header .nav-icon', { filter: 'brightness(0)', duration: 0.5 });
       
+      const header = document.getElementById('spa-header');
+      // No background or glass effect needed, keeping it transparent
+
       const links = document.querySelectorAll('#spa-header .nav-links a.text-white\\/60, #spa-header .nav-links a.text-white');
       links.forEach(l => {
         l.classList.remove('text-white/60', 'hover:text-white', 'text-white');
@@ -77,9 +73,12 @@ import WorksSection from '../components/WorksSection.astro';
     }
 
     function setNavLight() {
-      const img = document.querySelector('#spa-header .nav-img') as HTMLImageElement;
-      if (img) img.src = base + "images/towanlogo3.png";
+      // Switch logo back to light
+      gsap.to('#spa-header .nav-img', { filter: 'none', duration: 0.5 });
       gsap.to('#spa-header .nav-icon', { filter: 'brightness(0) invert(1)', duration: 0.5 });
+
+      const header = document.getElementById('spa-header');
+      // No background or glass effect needed, keeping it transparent
 
       const links = document.querySelectorAll('#spa-header .nav-links a.text-black\\/60, #spa-header .nav-links a.text-black');
       links.forEach(l => {
@@ -87,5 +86,27 @@ import WorksSection from '../components/WorksSection.astro';
         l.classList.add('text-white/60', 'hover:text-white');
       });
     }
+
+    // Works 區改為亮色液態玻璃背景:hero 時 nav 白色,捲入 works 轉深色。
+    // 直接依 Lenis / 原生捲動位置判斷 —— 每次捲動重算,不會卡住,
+    // 且載入時先跑一次以確保初始為白色(修正先前卡在黑色的問題)。
+    const heroEl = document.getElementById('hero');
+    let navIsDark: boolean | null = null;
+    function updateNavByScroll() {
+      const y = (window as any).lenis ? (window as any).lenis.scroll : window.scrollY;
+      const threshold = (heroEl?.offsetHeight ?? window.innerHeight) - 80;
+      const wantDark = y >= threshold;
+      if (wantDark === navIsDark) return;
+      navIsDark = wantDark;
+      wantDark ? setNavDark() : setNavLight();
+    }
+    updateNavByScroll();                                   // 初始狀態(頂端=白)
+    const lenis = (window as any).lenis;
+    if (lenis && lenis.on) lenis.on('scroll', updateNavByScroll);
+    window.addEventListener('scroll', updateNavByScroll, { passive: true });
+    document.addEventListener('astro:before-swap', () => {
+      if (lenis && lenis.off) lenis.off('scroll', updateNavByScroll);
+      window.removeEventListener('scroll', updateNavByScroll);
+    }, { once: true });
   });
 </script>

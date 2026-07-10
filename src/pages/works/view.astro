@@ -1,0 +1,286 @@
+---
+// Runtime-rendered work detail page: reads ?id= and fetches /data/works.json,
+// so works added from the admin panel display without a rebuild. Layout
+// numbers (title size, spacing, hero height…) come from /data/settings.json
+// so every work detail page shares one consistent template.
+import Base from '../../layouts/Base.astro';
+---
+<Base title="WORK — TOWAN">
+  <style is:global>
+    #project-head {
+      padding-top: var(--work-head-pad-top-mobile, 64px);
+      padding-bottom: var(--work-head-pad-bottom-mobile, 16px);
+    }
+    #project-title { font-size: var(--work-title-mobile, 26px); }
+    #project-subtitle { font-size: var(--work-subtitle-size, 14px); }
+    #project-services { font-size: var(--work-services-size, 12px); }
+    #project-content { max-width: var(--work-content-width, 850px); }
+    #project-content > * { margin-top: var(--work-content-gap-mobile, 48px); }
+    #project-content > *:first-child { margin-top: 0; }
+    .hero-aspect-box { aspect-ratio: var(--work-hero-aspect, 7) / 1; }
+    .hero-overlay-img { transform: translate(-50%, calc(-50% + var(--work-hero-overlay-y, 0px))); }
+    @media (min-width: 768px) {
+      #project-head {
+        padding-top: var(--work-head-pad-top-desktop, 96px);
+        padding-bottom: var(--work-head-pad-bottom-desktop, 32px);
+      }
+      #project-title { font-size: var(--work-title-desktop, 32px); }
+      #project-content > * { margin-top: var(--work-content-gap-desktop, 80px); }
+    }
+  </style>
+
+  <div class="bg-white min-h-screen relative flex flex-col">
+    <!-- Fixed Header Text Area -->
+    <div id="project-head" class="px-5 text-center flex-shrink-0 z-10 min-h-[240px] md:min-h-[300px]" style="max-width:900px; margin: 0 auto; width: 100%;">
+      <div id="project-head-inner"></div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="flex-grow w-full flex flex-col">
+      <!-- Hero Banner & Navigation Wrapper -->
+      <div class="relative w-full">
+        <!-- Hero Banner Zone -->
+        <div id="project-hero" class="w-full"></div>
+
+        <!-- Absolute Project Navigation (Arrows) - Overlapping Banner -->
+        <div class="absolute inset-0 pointer-events-none z-40 hidden md:block">
+          <div class="max-w-[1400px] mx-auto h-full w-full px-8 relative">
+            <a id="project-prev" href="#" aria-label="上一個作品" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-8 md:w-10 hover:opacity-50 transition-opacity duration-300 pointer-events-auto opacity-0">
+              <img src={`${import.meta.env.BASE_URL}images/arrow-l_dark.png`} alt="Prev" class="w-full h-auto mix-blend-difference invert" />
+            </a>
+            <a id="project-next" href="#" aria-label="下一個作品" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-8 md:w-10 hover:opacity-50 transition-opacity duration-300 pointer-events-auto opacity-0">
+              <img src={`${import.meta.env.BASE_URL}images/arrow-r-dark.png`} alt="Next" class="w-full h-auto mix-blend-difference invert" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rest of Images Zone -->
+      <div id="project-content" class="w-full mx-auto px-5 pt-8 pb-16 md:pt-16 flex flex-col items-center">
+        <!-- JS will inject images here -->
+      </div>
+
+      <!-- Bottom Navigation (Arrows) -->
+      <div class="w-full max-w-[1400px] mx-auto px-8 pb-24 flex justify-between items-center relative z-40 hidden md:flex">
+        <a id="project-prev-bottom" href="#" aria-label="上一個作品" class="w-8 md:w-10 hover:opacity-50 transition-opacity duration-300 pointer-events-auto opacity-0">
+          <img src={`${import.meta.env.BASE_URL}images/arrow-l_dark.png`} alt="Prev" class="w-full h-auto" />
+        </a>
+        <a id="project-next-bottom" href="#" aria-label="下一個作品" class="w-8 md:w-10 hover:opacity-50 transition-opacity duration-300 pointer-events-auto opacity-0">
+          <img src={`${import.meta.env.BASE_URL}images/arrow-r-dark.png`} alt="Next" class="w-full h-auto" />
+        </a>
+      </div>
+    </div>
+
+    <!-- Fixed Vertical Texts (Left & Right) -->
+    <div class="hidden md:block fixed left-4 bottom-8 z-40 text-[11px] tracking-[0.2em] text-neutral-400 pointer-events-none select-none" style="writing-mode:vertical-rl;transform:rotate(180deg)">© 2019 TOWAN IMAGE. ALL RIGHTS RESERVED.</div>
+
+    <a href={`${import.meta.env.BASE_URL}works/`} class="hidden md:block fixed right-4 bottom-8 z-40 text-[11px] tracking-[0.2em] text-neutral-400 hover:text-red-600 transition-colors uppercase no-underline" style="writing-mode:vertical-rl;transform:rotate(180deg)">← DISCOVER MORE</a>
+  </div>
+</Base>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  async function applySettings(base: string) {
+    let s: any = {};
+    try {
+      const res = await fetch(`${base}data/settings.json`, { cache: 'no-cache' });
+      s = (await res.json())?.work || {};
+    } catch {
+      s = {};
+    }
+    const root = document.documentElement.style;
+    const titleD = Number(s.title_size_desktop) || 32;
+    const titleM = Number(s.title_size_mobile) || 26;
+    const subtitle = Number(s.subtitle_size) || 14;
+    const services = Number(s.services_size) || 12;
+    const padTopD = Number(s.head_pad_top) || 96;
+    const padBottomD = Number(s.head_pad_bottom) || 32;
+    const gapD = Number(s.content_gap) || 80;
+    const width = Number(s.content_width) || 850;
+    const heroAspect = Number(s.hero_aspect) || 7;
+    const overlayY = Number(s.hero_overlay_y) || 0;
+
+    root.setProperty('--work-title-desktop', `${titleD}px`);
+    root.setProperty('--work-title-mobile', `${titleM}px`);
+    root.setProperty('--work-subtitle-size', `${subtitle}px`);
+    root.setProperty('--work-services-size', `${services}px`);
+    root.setProperty('--work-head-pad-top-desktop', `${padTopD}px`);
+    root.setProperty('--work-head-pad-top-mobile', `${Math.round(padTopD * 0.667)}px`);
+    root.setProperty('--work-head-pad-bottom-desktop', `${padBottomD}px`);
+    root.setProperty('--work-head-pad-bottom-mobile', `${Math.round(padBottomD * 0.5)}px`);
+    root.setProperty('--work-content-gap-desktop', `${gapD}px`);
+    root.setProperty('--work-content-gap-mobile', `${Math.round(gapD * 0.6)}px`);
+    root.setProperty('--work-content-width', `${width}px`);
+    root.setProperty('--work-hero-aspect', `${heroAspect}`);
+    root.setProperty('--work-hero-overlay-y', `${overlayY}px`);
+  }
+
+  async function initViewPage() {
+    const head = document.getElementById('project-head-inner');
+    const hero = document.getElementById('project-hero');
+    const container = document.getElementById('project-content');
+    if (!head || !hero || !container || container.dataset.rendered) return;
+
+    const base = import.meta.env.BASE_URL;
+    let id = new URLSearchParams(window.location.search).get('id');
+    if (!id) {
+      const m = window.location.pathname.match(/works\/([^/]+)\/?$/);
+      if (m && m[1] !== 'view') id = decodeURIComponent(m[1]);
+    }
+
+    await applySettings(base);
+
+    let projects = [];
+    try {
+      const res = await fetch(`${base}data/works.json`, { cache: 'no-cache' });
+      projects = await res.json();
+    } catch {
+      head.innerHTML = '<p class="text-sm text-neutral-500">Unable to load work data.</p>';
+      return;
+    }
+
+    const idx = projects.findIndex((p: any) => String(p.id) === String(id));
+    const project = idx >= 0 ? projects[idx] : undefined;
+    if (!project) {
+      head.innerHTML = '<p class="text-sm text-neutral-500">Work not found.</p>';
+      return;
+    }
+
+    // Keyboard navigation (Left/Right arrows)
+    if (!(window as any)._projectNavBound) {
+      (window as any)._projectNavBound = true;
+      window.addEventListener('keydown', (e) => {
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+        if (e.key === 'ArrowLeft') document.getElementById('project-prev')?.click();
+        if (e.key === 'ArrowRight') document.getElementById('project-next')?.click();
+      });
+    }
+
+    const prev = projects.length > 1 ? projects[(idx - 1 + projects.length) % projects.length] : null;
+    const next = projects.length > 1 ? projects[(idx + 1) % projects.length] : null;
+
+    const prevEl = document.getElementById('project-prev') as HTMLAnchorElement | null;
+    const nextEl = document.getElementById('project-next') as HTMLAnchorElement | null;
+    const prevElBot = document.getElementById('project-prev-bottom') as HTMLAnchorElement | null;
+    const nextElBot = document.getElementById('project-next-bottom') as HTMLAnchorElement | null;
+
+    if (prev) {
+      const href = `${base}works/view?id=${encodeURIComponent(prev.id)}`;
+      if (prevEl) {
+        prevEl.href = href;
+        prevEl.title = prev.title || '';
+        gsap.to(prevEl, { opacity: 1, x: 0, duration: 0.6, delay: 0.2, ease: 'power2.out' });
+      }
+      if (prevElBot) {
+        prevElBot.href = href;
+        prevElBot.title = prev.title || '';
+        gsap.to(prevElBot, { opacity: 1, duration: 0.6, delay: 0.2, ease: 'power2.out' });
+      }
+    } else {
+      if (prevEl) prevEl.style.display = 'none';
+      if (prevElBot) prevElBot.style.display = 'none';
+    }
+
+    if (next) {
+      const href = `${base}works/view?id=${encodeURIComponent(next.id)}`;
+      if (nextEl) {
+        nextEl.href = href;
+        nextEl.title = next.title || '';
+        gsap.to(nextEl, { opacity: 1, x: 0, duration: 0.6, delay: 0.3, ease: 'power2.out' });
+      }
+      if (nextElBot) {
+        nextElBot.href = href;
+        nextElBot.title = next.title || '';
+        gsap.to(nextElBot, { opacity: 1, duration: 0.6, delay: 0.3, ease: 'power2.out' });
+      }
+    } else {
+      if (nextEl) nextEl.style.display = 'none';
+      if (nextElBot) nextElBot.style.display = 'none';
+    }
+
+    container.dataset.rendered = '1';
+    document.title = `${project.title} — TOWAN`;
+
+    const esc = (s: string) => String(s ?? '').replace(/[&<>"']/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string
+    ));
+
+    const services: string[] = project.services || [];
+    head.innerHTML = `
+      <h1 id="project-title" class="font-bold tracking-[0.1em] text-neutral-900 mb-2 leading-tight uppercase relative inline-block">${esc(project.title)}</h1>
+      ${project.subtitle ? `<p id="project-subtitle" class="text-neutral-600 tracking-wider mb-8">${esc(project.subtitle)}</p>` : ''}
+      ${services.length ? `<div id="project-services" class="mt-8 flex flex-col space-y-2 tracking-[0.15em] text-neutral-800 font-medium uppercase">
+        ${services.map(s => `<span>${esc(s)}</span>`).join('')}
+      </div>` : ''}
+    `;
+
+    const heroBg = project.hero_bg || '';
+    const overlay = project.hero_overlay || '';
+    const overlayW = project.hero_overlay_w || 45;
+    const folder = project.inner_folder || '';
+    const images = project.inner_images || [];
+    const dims = project.inner_dims || {};
+
+    function imgUrl(f: string) {
+      if (!f) return '';
+      if (f.startsWith('http')) return f;
+      if (f.startsWith('youtube:') || f.startsWith('vimeo:')) return f;
+      const parts = f.split('?');
+      const encFile = parts[0].split('/').map(encodeURIComponent).join('/');
+      let query = parts.length > 1 ? '?' + parts[1] + '&v=2' : '?v=2';
+      return `${base}media/projects/${folder ? folder + '/' : ''}${encFile}${query || '?v=2'}`;
+    }
+
+    if (heroBg) {
+      hero.innerHTML = `
+        <div class="hero-aspect-box relative w-full overflow-hidden">
+          <img src="${imgUrl(heroBg)}" alt="" class="w-full h-full object-cover" />
+          ${overlay ? `<img src="${imgUrl(overlay)}" alt="" class="hero-overlay-img absolute left-1/2 top-1/2 object-contain" style="max-width:${overlayW}%; max-height:45%;" />` : ''}
+        </div>
+      `;
+    }
+
+    function dimAttr(f: string) {
+      if (dims[f]) return ` width="${dims[f][0]}" height="${dims[f][1]}"`;
+      return '';
+    }
+
+    function block(html: string) {
+      return `<div class="reveal-img opacity-0 translate-y-8 w-full relative group">${html}</div>`;
+    }
+
+    container.innerHTML = images.map((item: string) => {
+      if (item.startsWith('youtube:')) {
+        const id = item.split(':')[1];
+        return block(`<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube.com/embed/${id}?autoplay=1&loop=0&showinfo=0&theme=dark&color=white&controls=1&modestbranding=0&rel=0&mute=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe></div>`);
+      } else if (item.startsWith('vimeo:')) {
+        const id = item.split(':')[1];
+        return block(`<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://player.vimeo.com/video/${id}?color=FFFFFF&autoplay=1&loop=1&title=0&byline=0&portrait=0&muted=1" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe></div>`);
+      } else {
+        return block(`<img src="${imgUrl(item)}"${dimAttr(item)} alt="" loading="lazy" decoding="async" class="w-full h-auto block" />`);
+      }
+    }).join('');
+
+    gsap.registerPlugin(ScrollTrigger);
+    // Delay slightly to let images layout
+    setTimeout(() => {
+      gsap.utils.toArray<HTMLElement>('.reveal-img').forEach((el) => {
+        gsap.to(el, {
+          opacity: 1, y: 0, duration: 0.9, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 90%' },
+        });
+      });
+      ScrollTrigger.refresh();
+    }, 100);
+  }
+
+  // Handle client-side routing transitions
+  initViewPage();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initViewPage);
+  } else {
+    initViewPage();
+  }
+</script>

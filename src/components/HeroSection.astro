@@ -1,28 +1,17 @@
 ---
 ---
-<!-- Full-viewport hero -->
-<section id="hero" class="relative w-full h-screen overflow-hidden">
-
-  <!-- [z-0] Slideshow images -->
-  <div id="slides" class="absolute inset-0 z-0">
-    {[0,2,3,4,5,7,9].map((n, i) => (
-      <img
-        src={`${import.meta.env.BASE_URL}images/i${n}.jpg`}
-        class="slide absolute inset-0 w-full h-full object-cover"
-        style={`opacity:${i === 0 ? 1 : 0}`}
-      />
-    ))}
-  </div>
+<!-- Full-viewport hero — 背景由共用的 #stage-bg 提供(透明,讓 fixed 幻燈片透出) -->
+<section id="hero" class="relative z-10 w-full h-screen overflow-hidden">
 
   <!-- [z-1] Frosted glass panel — backdrop-filter + tint directly on panel -->
   <!-- 玻璃質感色塊層 (z-10) -->
-  <div class="absolute z-10 pointer-events-none rounded-xl sm:rounded-2xl md:rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] overflow-hidden" 
+  <div id="hero-glass" class="absolute z-10 pointer-events-none rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden"
     style="top: 2.5vh; bottom: 2.5vh; left: 2.5vw; right: 2.5vw;
            background: rgba(229, 0, 78, 0.55);
            backdrop-filter: blur(48px) saturate(180%);
            -webkit-backdrop-filter: blur(48px) saturate(180%);
            border: 1px solid rgba(255, 255, 255, 0.15);
-           box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 2px 20px rgba(255, 255, 255, 0.15), 0 30px 60px rgba(0, 0, 0, 0.3);">
+           box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 2px 20px rgba(255, 255, 255, 0.15);">
     
     <!-- Subtle highlight skin -->
     <div class="absolute inset-0 pointer-events-none" style="background: rgba(255,255,255,0.03);"></div>
@@ -34,14 +23,13 @@
     <div class="absolute inset-0 pointer-events-none" style="opacity:0.04; background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>'); background-size:300px 300px;"></div>
   </div>
 
-  <!-- HOW WE WORK — breathing glow, links to works -->
-  <a href="#works-section" class="absolute bottom-8 right-5 md:bottom-[12vh] md:right-[6vw] text-right no-underline group flex flex-col items-end translate-y-[5px] pointer-events-auto" style="z-index:30">
-    <div id="how-we-work-group" class="flex items-center gap-2 md:gap-3">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="relative -top-[1px] text-white/80 group-hover:text-white group-hover:translate-y-2 transition-all duration-300 w-5 h-5 md:w-6 md:h-6"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-      <p id="how-we-work-text" class="font-semibold tracking-[0.22em] text-white/80 group-hover:text-white group-hover:translate-y-2 transition-all duration-300" style="font-size:clamp(1.1rem,2.1vw,1.6rem);">HOW WE WORK</p>
-    </div>
-    <p class="text-white/40 tracking-widest mt-1 text-[0.65rem]">2008 — PRESENT</p>
-  </a>
+  <!-- SCROLL cue — 引導使用者向下滾動進入畫廊 -->
+  <div id="scroll-cue" class="absolute left-1/2 -translate-x-1/2 bottom-[5.5vh] z-30 flex flex-col items-center gap-3 pointer-events-none select-none">
+    <span class="scroll-cue-label" style="text-indent:0.5em;">SCROLL</span>
+    <span class="scroll-cue-track">
+      <span class="scroll-cue-drop"></span>
+    </span>
+  </div>
 
   <!-- Title ABOVE glass panel (z-20) -->
   <div class="absolute z-20 pointer-events-none select-none flex items-center justify-center w-[95vw] md:w-[47.5vw]"
@@ -52,6 +40,41 @@
 
 </section>
 
+<style>
+  .scroll-cue-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .scroll-cue-track {
+    position: relative;
+    display: block;
+    width: 24px;
+    height: 38px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+  }
+  .scroll-cue-drop {
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    width: 4px;
+    height: 8px;
+    margin-left: -2px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    animation: wheel-scroll 2s ease-in-out infinite;
+  }
+  @keyframes wheel-scroll {
+    0%   { transform: translateY(0); opacity: 1; }
+    55%  { transform: translateY(14px); opacity: 0; }
+    56%  { transform: translateY(0); opacity: 0; }
+    75%  { opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+</style>
+
 <script>
   import { gsap } from 'gsap';
   import Lenis from 'lenis';
@@ -59,63 +82,12 @@
   document.addEventListener('astro:page-load', () => {
     if (!document.getElementById('hero-title')) return;
 
-    // ── Slideshow crossfade ──
-    const slides = document.querySelectorAll<HTMLImageElement>('.slide');
-    if (slides.length > 0) {
-      let current = 0;
-      function nextSlide() {
-        const prev = current;
-        current = (current + 1) % slides.length;
-        gsap.to(slides[prev], { opacity: 0, duration: 1.5, ease: 'power2.inOut' });
-        gsap.to(slides[current], { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
-      }
-      const slideInterval = setInterval(nextSlide, 4000);
-      document.addEventListener('astro:before-swap', () => clearInterval(slideInterval), { once: true });
-    }
+    // 幻燈片改由共用的 #stage-bg 播放(見 StageBackground.astro)
 
     // ── Hero title entrance ──
     gsap.from('#hero-title', {
       opacity: 0, y: 60, duration: 1.4, ease: 'power3.out', delay: 0.4,
     });
 
-    // ── HOW WE WORK breathing ──
-    gsap.fromTo('#how-we-work-group',
-      { scale: 1, y: 0, opacity: 0.7 },
-      {
-        scale: 1.015,
-        y: -10,
-        opacity: 1,
-        duration: 2.2,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        transformOrigin: 'right center',
-      }
-    );
-
-    gsap.fromTo('#how-we-work-text',
-      { textShadow: '0 0 0px rgba(255,200,210,0)' },
-      {
-        textShadow: '0 0 28px rgba(255,215,220,1), 0 0 70px rgba(255,160,180,0.85)',
-        duration: 2.2,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-      }
-    );
-
-    // Smooth scroll to works section when clicking "HOW WE WORK"
-    const howWeWorkBtn = document.querySelector('a[href="#works-section"]');
-    if (howWeWorkBtn) {
-      howWeWorkBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Use Lenis if available, otherwise native scrollTo
-        if ((window as any).lenis) {
-          (window as any).lenis.scrollTo('#works-section');
-        } else {
-          document.querySelector('#works-section')?.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    }
   });
 </script>

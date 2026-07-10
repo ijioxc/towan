@@ -1,4 +1,7 @@
 ---
+// Runtime-rendered Contact page: reads /data/contact.json so text and font
+// sizes edited from the admin panel show up without a rebuild. The map is
+// fixed and not admin-editable.
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Contact — TOWAN" heroNav={true}>
@@ -6,7 +9,7 @@ import Base from '../layouts/Base.astro';
   <div class="box-border fixed z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none text-black"
     style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
     <a href={import.meta.env.BASE_URL} class="pointer-events-auto hover:opacity-50 transition-opacity inline-block translate-x-4 translate-y-2">
-      <img src={import.meta.env.BASE_URL + "images/towanlogo2.png"} alt="TOWAN" class="h-5" />
+      <img src={import.meta.env.BASE_URL + "images/towanlogo-BLK.png"} alt="TOWAN" class="h-5" />
     </a>
         <nav class="flex items-center text-[10px] sm:text-xs tracking-widest uppercase pointer-events-auto font-normal">
       <a href={import.meta.env.BASE_URL + "works"} class="text-black/60 hover:text-black transition-colors no-underline mr-2 sm:mr-4 md:mr-7">WORKS</a>
@@ -22,19 +25,52 @@ import Base from '../layouts/Base.astro';
   </div>
 
   <div class="w-full max-w-5xl mx-auto min-h-screen pt-40 pb-20 px-6 sm:px-12 md:px-24 flex flex-col items-center text-center">
-    <h1 class="text-lg tracking-[0.2em] font-bold mb-4">TOWAN DIGITAL IMAGE</h1>
-    <h2 class="text-sm tracking-[0.4em] text-neutral-500 mb-16">圖王數位影像有限公司</h2>
-    
-    <div class="w-full flex flex-col gap-2 text-sm text-neutral-600 mb-12 tracking-widest">
-      <p>T +886 2 8221 8008</p>
-      <p>F +886 2 8221 8005</p>
-      <p class="mt-4">235新北市中和區立德街103號8F</p>
-      <p>（ MIT國際科學園區 第三期 ）</p>
-    </div>
+    <div id="contact-content" class="w-full flex flex-col items-center"></div>
 
-    <!-- Google Map -->
+    <!-- Google Map (fixed, not admin-editable) -->
     <div class="w-full max-w-4xl h-[400px] bg-neutral-100 rounded-lg overflow-hidden shadow-sm">
       <iframe class="w-full h-full" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;q=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%92%8C%E5%8D%80%E7%AB%8B%E5%BE%B7%E8%A1%97103%E8%99%9F8%E6%A8%93&amp;aq=0&amp;ie=UTF8&amp;t=m&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe>
     </div>
   </div>
 </Base>
+
+<script>
+  async function initContactPage() {
+    const root = document.getElementById('contact-content');
+    if (!root || root.dataset.rendered) return;
+
+    const base = import.meta.env.BASE_URL;
+    let data: { blocks?: any[] } = {};
+    try {
+      const res = await fetch(`${base}data/contact.json`, { cache: 'no-cache' });
+      data = await res.json();
+    } catch {
+      root.innerHTML = '<p class="text-sm text-neutral-500">Unable to load content.</p>';
+      return;
+    }
+
+    root.dataset.rendered = '1';
+
+    const esc = (s: string) => String(s ?? '').replace(/[&<>"']/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string
+    ));
+
+    const TYPE_CLASS: Record<string, string> = {
+      h1: 'tracking-[0.2em] font-bold w-full max-w-2xl text-center',
+      h2: 'tracking-[0.4em] text-neutral-500 w-full max-w-2xl text-center',
+      p: 'tracking-widest text-neutral-600 w-full max-w-2xl text-center',
+    };
+    const TAG: Record<string, string> = { h1: 'h1', h2: 'h2', p: 'p' };
+
+    const blocks = data.blocks || [];
+    root.innerHTML = blocks.map((b: any) => {
+      const tag = TAG[b.type] || 'p';
+      const cls = TYPE_CLASS[b.type] || TYPE_CLASS.p;
+      const style = `font-size:${Number(b.size) || 14}px;margin-bottom:${Number(b.mb) || 0}px;${b.leading ? `line-height:${Number(b.leading)};` : ''}`;
+      return `<${tag} class="${cls}" style="${style}">${esc(b.text)}</${tag}>`;
+    }).join('');
+  }
+
+  initContactPage();
+  document.addEventListener('astro:page-load', initContactPage);
+</script>

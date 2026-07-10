@@ -38,7 +38,7 @@ const { title = 'TOWAN 數位影像', heroNav = false } = Astro.props;
   {!heroNav && (
     <header class="box-border fixed z-50 px-5 md:px-8 py-5 md:py-6 flex items-center justify-between pointer-events-none text-black"
       style="top: 2.5vh; left: 2.5vw; right: 2.5vw;">
-      <a href={import.meta.env.BASE_URL} class="pointer-events-auto inline-block translate-x-4 translate-y-2"><img src={import.meta.env.BASE_URL + "images/towanlogo2.png"} alt="TOWAN" class="h-5" /></a>
+      <a href={import.meta.env.BASE_URL} class="pointer-events-auto inline-block translate-x-4 translate-y-2"><img src={import.meta.env.BASE_URL + "images/towanlogo-BLK.png"} alt="TOWAN" class="h-5" /></a>
             <nav class="flex items-center text-[10px] sm:text-xs tracking-widest text-neutral-400 uppercase pointer-events-auto font-normal">
         <a href={import.meta.env.BASE_URL + "works"} class="hover:text-neutral-900 transition-colors no-underline mr-2 sm:mr-4 md:mr-7">WORKS</a>
         <a href={import.meta.env.BASE_URL + "about"} class="hover:text-neutral-900 transition-colors no-underline mr-2 sm:mr-4 md:mr-7">ABOUT</a>
@@ -65,7 +65,7 @@ const { title = 'TOWAN 數位影像', heroNav = false } = Astro.props;
   function initLenis() {
     if (lenis) lenis.destroy();
     lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-    window.lenis = lenis;
+    (window as any).lenis = lenis;
 
     function raf(time: number) {
       lenis.raf(time);

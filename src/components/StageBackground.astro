@@ -1,0 +1,138 @@
+---
+// 首頁與作品頁共用的幻燈片背景 —— 一組幻燈片、一個計時器。
+// 停在視窗背後(fixed),隨捲動由清晰(hero)漸變為液態玻璃(works 背景)。
+const slides = [1, 2, 3, 4, 5, 6, 7];
+---
+
+<div id="stage-bg" aria-hidden="true">
+  <div id="stage-slides">
+    {slides.map((n, i) => (
+      <img
+        src={`${import.meta.env.BASE_URL}media/homepage_slides/slide${n}.jpg`}
+        class="stage-slide"
+        style={`opacity:${i === 0 ? 1 : 0}`}
+        alt=""
+        loading={i === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    ))}
+  </div>
+
+  <!-- 液態玻璃層:初始透明,捲動進入 works 時漸顯 -->
+  <div id="stage-frost"></div>
+  <div id="stage-rake"></div>
+  <div id="stage-grain"></div>
+</div>
+
+<style is:global>
+  #stage-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: #f2f2f4;
+    pointer-events: none;
+  }
+  #stage-slides {
+    position: absolute;
+    inset: 0;
+    will-change: filter;
+    transform: translateZ(0);
+  }
+  #stage-slides .stage-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* 白霜 —— 液態玻璃的乳白底 */
+  #stage-frost {
+    position: absolute;
+    inset: 0;
+    background: rgba(248, 248, 250, 0.9);
+    opacity: 0;
+    will-change: opacity;
+  }
+  /* 斜向光澤 —— 玻璃的反光 */
+  #stage-rake {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity;
+    background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0.15) 28%,
+      rgba(255, 255, 255, 0) 55%,
+      rgba(120, 120, 145, 0.08) 100%);
+  }
+  #stage-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity;
+    background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22300%22 height=%22300%22 filter=%22url(%23n)%22/></svg>');
+    background-size: 300px 300px;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener('astro:page-load', () => {
+    const stage = document.getElementById('stage-bg');
+    if (!stage) return;
+
+    const slidesLayer = document.getElementById('stage-slides')!;
+    const frost = document.getElementById('stage-frost')!;
+    const rake = document.getElementById('stage-rake')!;
+    const grain = document.getElementById('stage-grain')!;
+    const slides = stage.querySelectorAll<HTMLImageElement>('.stage-slide');
+
+    /* ── 共用幻燈片:單一計時器的緩慢交叉淡化 ── */
+    let slideInterval: ReturnType<typeof setInterval> | null = null;
+    if (slides.length > 1) {
+      let current = 0;
+      slideInterval = setInterval(() => {
+        const prev = current;
+        current = (current + 1) % slides.length;
+        gsap.to(slides[prev], { opacity: 0, duration: 1.6, ease: 'power2.inOut' });
+        gsap.to(slides[current], { opacity: 1, duration: 1.6, ease: 'power2.inOut' });
+      }, 5000);
+    }
+
+    /* ── 液態玻璃化:離開 hero 時,幻燈片漸漸霧化成 works 背景 ── */
+    // progress 0 (hero 頂) → 1 (hero 完全捲出、works 到頂)
+    // 粉色玻璃卡片與大字不做任何淡化 —— 兩者是 #hero 內的一般文件流元素,
+    // 捲動時本來就會一起隨頁面向上滑走、自然捲出視窗,不需要額外的 JS 效果。
+    const apply = (p: number) => {
+      const e = gsap.parseEase('power2.inOut')(p);
+      slidesLayer.style.filter =
+        `blur(${e * 64}px) saturate(${100 + e * 60}%) brightness(${1 + e * 0.08})`;
+      frost.style.opacity = String(e * 0.9);
+      rake.style.opacity = String(e);
+      grain.style.opacity = String(e * 0.03);
+    };
+    apply(0);
+
+    const hero = document.getElementById('hero');
+    let melt: ScrollTrigger | null = null;
+    if (hero) {
+      melt = ScrollTrigger.create({
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        onUpdate: (self) => apply(self.progress),
+      });
+    }
+
+    document.addEventListener('astro:before-swap', () => {
+      if (slideInterval) clearInterval(slideInterval);
+      melt?.kill();
+    }, { once: true });
+  });
+</script>

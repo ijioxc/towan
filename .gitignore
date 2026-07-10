@@ -23,3 +23,6 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 scratch/
+
+# admin-panel secrets & auto-generated backups (never commit)
+admin-panel/_private/
